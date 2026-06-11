@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>stor • simple file manager</title>
+  <!-- Unsplash for random background styling, no complex usage -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #0b0f1c;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+    /* subtle unsplash-inspired background texture using a static unsplash source */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.25) blur(3px);
+      z-index: -1;
+      transform: scale(1.02);
+    }
+
+    .manager-card {
+      width: 100%;
+      max-width: 750px;
+      background: rgba(18, 22, 33, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      color: #eef2ff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .locked-view, .dashboard-view {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    .password-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9ca3af;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    input {
+      flex: 2;
+      min-width: 180px;
+      background: rgba(10, 14, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.9rem 1.2rem;
+      border-radius: 2.5rem;
+      font-size: 1rem;
+      color: white;
+      outline: none;
+      backdrop-filter: blur(8px);
+      transition: border 0.2s;
+    }
+    input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    }
+
+    button {
+      background: #4f46e5;
+      border: none;
+      padding: 0.9rem 1.8rem;
+      border-radius: 2.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      letter-spacing: 0.3px;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px -8px rgba(79, 70, 229, 0.5);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .secondary-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ddd;
+      padding: 0.7rem 1.4rem;
+    }
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .error-msg {
+      color: #fca5a5;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+      font-weight: 400;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .cloud-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.05);
+      padding: 0.4rem 1.2rem;
+      border-radius: 3rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .upload-section {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 2rem;
+      padding: 1.4rem 1.2rem;
+      border: 1px dashed rgba(255,255,255,0.25);
+    }
+
+    .file-list {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 1.8rem;
+      padding: 1rem;
+      max-height: 350px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s;
+    }
+    .file-item:last-child {
+      border-bottom: none;
+    }
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      word-break: break-word;
+    }
+    .file-actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-size: 1.2rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.6rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.05);
+    }
+    .icon-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+    .empty-message {
+      text-align: center;
+      color: #94a3b8;
+      padding: 2rem;
+    }
+
+    a {
+      color: #c4b5fd;
+      text-decoration: none;
+    }
+
+    hr {
+      border-color: rgba(255,255,255,0.1);
+      margin: 0.5rem 0 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="manager-card" id="appRoot">
+    <!-- Locked view (password) -->
+    <div id="lockedView" class="locked-view">
+      <h1>🔐 <span>stor</span></h1>
+      <p style="color: #b9c2d9; margin-top: -0.5rem;">simple file manager · cloudflare</p>
+      <div class="password-area">
+        <label>Enter password</label>
+        <div class="input-group">
+          <input type="password" id="passwordInput" placeholder="••••••••" autocomplete="off" />
+          <button id="unlockBtn">→ Unlock</button>
+        </div>
+        <div id="passwordError" class="error-msg"></div>
+        <p style="font-size:0.8rem; color:#6b7280; margin-top:0.3rem;">Default password: <strong style="color:#a78bfa;">stor-demo</strong></p>
+      </div>
+      <div style="margin-top:0.5rem; display:flex; gap:1rem; font-size:0.8rem; color:#9ca3af;">
+        <span>☁️ Cloudflare Pages</span>
+        <span>🖼️ Cloudinary</span>
+        <span>📷 Unsplash bg</span>
+      </div>
+    </div>
+
+    <!-- Dashboard view (after login) -->
+    <div id="dashboardView" class="dashboard-view hidden">
+      <div class="dashboard-header">
+        <h1 style="font-size:2rem;">📁 <span>stor</span></h1>
+        <div style="display:flex; gap:0.8rem; align-items:center;">
+          <div class="cloud-badge">
+            <span>☁️ cloudinary</span>
+          </div>
+          <button id="logoutBtn" class="secondary-btn" style="padding:0.5rem 1.2rem;">⏻ Exit</button>
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+          <label for="fileInput" style="margin:0; cursor:pointer; background:#4f46e5; padding:0.6rem 1.4rem; border-radius:2rem; display:inline-flex; align-items:center; gap:0.3rem; color:white;">
+            <span>⬆️</span> Choose file
+          </label>
+          <input type="file" id="fileInput" style="display:none;" multiple />
+          <button id="uploadBtn">Upload to Cloudinary</button>
+        </div>
+        <div id="uploadStatus" style="margin-top:0.8rem; font-size:0.9rem; color:#cbd5e1;"></div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-weight:400;">📋 Your files</h3>
+        <button id="refreshFilesBtn" class="secondary-btn" style="padding:0.4rem 1rem;">🔄 Refresh</button>
+      </div>
+
+      <div id="fileListContainer" class="file-list">
+        <div class="empty-message">Loading files...</div>
+      </div>
+      
+      <div style="font-size:0.75rem; color:#6b7280; text-align:center; margin-top:0.4rem;">
+        using Cloudinary unsigned upload · <a href="https://cloudinary.com" target="_blank">cloudinary</a> + unsplash background
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- SIMPLE CONFIG ----------
+      // Password for file manager (change as needed)
+      const APP_PASSWORD = "stor-demo"; 
+      
+      // Cloudinary configuration - using unsigned upload preset.
+      // REPLACE with your actual cloud name and upload preset.
+      const CLOUDINARY_CLOUD_NAME = "demo";      // default demo cloud (works for testing)
+      const CLOUDINARY_UPLOAD_PRESET = "ml_default"; // unsigned preset, for demo cloud use "ml_default"
+      
+      // Base URL for Cloudinary API
+      const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`;
+      
+      // For listing files we use Cloudinary resource API (requires signed requests in production, 
+      // but for simple demo we simulate with local storage + keep track of uploaded files)
+      // To keep it truly simple without backend, we store file metadata in localStorage.
+      const STORAGE_KEY = "stor_files_meta";
+      
+      // ---------- STATE ----------
+      let isAuthenticated = false;
+      
+      // DOM elements
+      const lockedView = document.getElementById('lockedView');
+      const dashboardView = document.getElementById('dashboardView');
+      const passwordInput = document.getElementById('passwordInput');
+      const unlockBtn = document.getElementById('unlockBtn');
+      const passwordError = document.getElementById('passwordError');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const fileInput = document.getElementById('fileInput');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const uploadStatus = document.getElementById('uploadStatus');
+      const refreshFilesBtn = document.getElementById('refreshFilesBtn');
+      const fileListContainer = document.getElementById('fileListContainer');
+      
+      // ---------- HELPER: Local file metadata storage ----------
+      function getStoredFiles() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      
+      function saveFilesMetadata(filesArray) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(filesArray));
+      }
+      
+      function addFileMetadata(fileMeta) {
+        const files = getStoredFiles();
+        files.unshift(fileMeta); // newest first
+        saveFilesMetadata(files);
+      }
+      
+      function removeFileMetadata(publicId) {
+        const files = getStoredFiles();
+        const filtered = files.filter(f => f.public_id !== publicId);
+        saveFilesMetadata(filtered);
+      }
+      
+      // ---------- RENDER FILE LIST ----------
+      function renderFileList() {
+        const files = getStoredFiles();
+        if (!fileListContainer) return;
+        
+        if (files.length === 0) {
+          fileListContainer.innerHTML = `<div class="empty-message">✨ No files yet. Upload something.</div>`;
+          return;
+        }
+        
+        let html = '';
+        files.forEach(file => {
+          const safeUrl = file.secure_url || file.url || '';
+          const publicId = file.public_id || '';
+          const displayName = file.original_filename || publicId || 'file';
+          const format = file.format || '';
+          const fullName = format ? `${displayName}.${format}` : displayName;
+          
+          html += `
+            <div class="file-item" data-public-id="${publicId}">
+              <div class="file-info">
+                <span>📄</span>
+                <div>
+                  <div style="font-weight:500;">${escapeHtml(fullName)}</div>
+                  <div style="font-size:0.7rem; color:#9ca3af;">${format || 'file'} · ${file.resource_type || 'image'}</div>
+                </div>
+              </div>
+              <div class="file-actions">
+                <a href="${safeUrl}" target="_blank" class="icon-btn" title="View/Open">👁️</a>
+                <button class="icon-btn copy-btn" data-url="${safeUrl}" title="Copy URL">📋</button>
+                <button class="icon-btn delete-btn" data-public-id="${publicId}" title="Delete (local)">🗑️</button>
+              </div>
+            </div>
+          `;
+        });
+        fileListContainer.innerHTML = html;
+        
+        // Attach event listeners for copy and delete buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const url = btn.getAttribute('data-url');
+            if (url) {
+              navigator.clipboard.writeText(url).then(() => {
+                alert('URL copied to clipboard!');
+              }).catch(() => {
+                prompt('Copy this URL:', url);
+              });
+            }
+          });
+        });
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const publicId = btn.getAttribute('data-public-id');
+            if (publicId && confirm('Remove this file from local list? (File may still exist on Cloudinary)')) {
+              removeFileMetadata(publicId);
+              renderFileList();
+            }
+          });
+        });
+      }
+      
+      function escapeHtml(text) {
+        return String(text).replace(/[&<>"]/g, function(m) {
+          if (m === '&') return '&amp;';
+          if (m === '<') return '&lt;';
+          if (m === '>') return '&gt;';
+          if (m === '"') return '&quot;';
+          return m;
+        });
+      }
+      
+      // ---------- AUTH ----------
+      function showDashboard() {
+        lockedView.classList.add('hidden');
+        dashboardView.classList.remove('hidden');
+        renderFileList();
+      }
+      
+      function showLocked() {
+        dashboardView.classList.add('hidden');
+        lockedView.classList.remove('hidden');
+        if (passwordInput) passwordInput.value = '';
+        passwordError.textContent = '';
+      }
+      
+      function attemptLogin() {
+        const entered = passwordInput ? passwordInput.value.trim() : '';
+        if (entered === APP_PASSWORD) {
+          isAuthenticated = true;
+          passwordError.textContent = '';
+          showDashboard();
+        } else {
+          isAuthenticated = false;
+          passwordError.textContent = 'Incorrect password. Try again.';
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      }
+      
+      // ---------- UPLOAD TO CLOUDINARY ----------
+      async function uploadFiles(files) {
+        if (!files || files.length === 0) return;
+        
+        uploadStatus.textContent = `Uploading ${files.length} file(s)...`;
+        let successCount = 0;
+        
+        for (let file of files) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+          // Optional: add public_id or folder if needed, but keep simple.
+          
+          try {
+            const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+              method: 'POST',
+              body: formData,
+            });
+            
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.error?.message || `Upload failed (${response.status})`);
+            }
+            
+            const result = await response.json();
+            // Build metadata object
+            const meta = {
+              public_id: result.public_id,
+              secure_url: result.secure_url,
+              url: result.url,
+              original_filename: result.original_filename,
+              format: result.format,
+              resource_type: result.resource_type,
+              created_at: result.created_at,
+            };
+            addFileMetadata(meta);
+            successCount++;
+          } catch (err) {
+            console.error('Upload error:', err);
+            uploadStatus.textContent = `Error: ${err.message}`;
+          }
+        }
+        
+        if (successCount > 0) {
+          uploadStatus.textContent = `✅ ${successCount} file(s) uploaded successfully.`;
+          renderFileList();
+        } else {
+          uploadStatus.textContent = '⚠️ No files uploaded.';
+        }
+        
+        // Clear file input
+        if (fileInput) fileInput.value = '';
+      }
+      
+      // ---------- EVENT LISTENERS ----------
+      unlockBtn.addEventListener('click', attemptLogin);
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') attemptLogin();
+      });
+      
+      logoutBtn.addEventListener('click', () => {
+        isAuthenticated = false;
+        showLocked();
+      });
+      
+      uploadBtn.addEventListener('click', () => {
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+          uploadStatus.textContent = 'Please select at least one file.';
+          return;
+        }
+        uploadFiles(fileInput.files);
+      });
+      
+      refreshFilesBtn.addEventListener('click', () => {
+        renderFileList();
+        uploadStatus.textContent = 'File list refreshed.';
+      });
+      
+      // Also allow click on label to trigger file input (already set)
+      
+      // Initial check: if somehow authenticated (page refresh keeps dashboard? no, we re-lock always)
+      // For simplicity always start locked.
+      showLocked();
+      
+      // Optional: demo preload some files if storage empty? Keep it clean.
+      // But we can pre-populate with a sample from Cloudinary demo if needed.
+      // (Not necessary)
+    })();
+  </script>
+</body>
+</html>
