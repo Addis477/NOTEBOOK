@@ -3,396 +3,600 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>stor • file manager</title>
+  <title>Wallpaper Collection</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: #0b0f1c;
+      background: #0a0f0a;
+      color: #e2ffe2;
       min-height: 100vh;
+    }
+    .hidden { display: none !important; }
+
+    /* HOME PAGE */
+    .home-page {
+      min-height: 100vh;
+      position: relative;
+    }
+    .hero {
+      position: relative;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.25rem;
-      position: relative;
+      overflow: hidden;
     }
-    body::before {
-      content: "";
-      position: fixed;
+    .hero-bg {
+      position: absolute;
       inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.25) blur(3px);
-      z-index: -1;
+      background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover;
+      filter: brightness(0.35) sepia(0.2) hue-rotate(40deg);
+      z-index: 0;
     }
-    .card {
-      width: 100%;
-      max-width: 800px;
-      background: rgba(18, 22, 33, 0.85);
-      backdrop-filter: blur(20px);
-      border-radius: 2.5rem;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 25px 45px rgba(0,0,0,0.6);
-      color: #eef2ff;
-      border: 1px solid rgba(255,255,255,0.08);
-      max-height: 90vh;
-      overflow-y: auto;
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
     }
-    .hidden { display: none !important; }
-    h1 {
-      font-size: 2rem;
-      font-weight: 500;
-      color: #fff;
-    }
-    h1 span {
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    .hero-content h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #86efac, #22c55e, #4ade80);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    h2 { font-size: 1.2rem; font-weight: 400; margin-bottom: 0.5rem; }
-    input, textarea {
-      width: 100%;
-      background: rgba(10,14,23,0.7);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 0.75rem 1rem;
-      border-radius: 1.5rem;
-      font-size: 0.95rem;
-      color: white;
-      outline: none;
-      font-family: inherit;
+    .hero-content p {
+      font-size: 1.3rem;
+      color: #86efac;
+      margin-bottom: 2rem;
     }
-    textarea {
-      border-radius: 1rem;
-      resize: vertical;
-      min-height: 100px;
-    }
-    input:focus, textarea:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 2px rgba(139,92,246,0.3);
-    }
-    button {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 2rem;
-      font-weight: 600;
-      color: white;
+    .hero-content button {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      border-radius: 3rem;
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(74,222,128,0.4);
+      color: #86efac;
       cursor: pointer;
-      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    .hero-content button:hover {
+      background: rgba(34,197,94,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(34,197,94,0.2);
+    }
+    .gallery-section {
+      padding: 4rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .gallery-section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-weight: 400;
+      color: #86efac;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .gallery-card {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      background: rgba(34,197,94,0.03);
+      border: 1px solid rgba(74,222,128,0.08);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .gallery-card:hover { transform: translateY(-5px); border-color: rgba(74,222,128,0.3); }
+    .gallery-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-card .info {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #6ee7a7;
+    }
+    .login-fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 50;
+      padding: 0.8rem 1.5rem;
+      border-radius: 3rem;
+      background: rgba(34,197,94,0.8);
+      border: none;
+      color: #052e16;
+      cursor: pointer;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+    .login-fab:hover { background: #22c55e; transform: scale(1.05); }
+
+    /* LOGIN */
+    .login-overlay {
+      position: fixed; inset: 0; background: rgba(5,20,5,0.9);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .login-box {
+      background: #0d1f0d;
+      border-radius: 2rem;
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid rgba(74,222,128,0.15);
+      text-align: center;
+    }
+    .login-box h2 { margin-bottom: 1.5rem; font-weight: 400; color: #86efac; }
+    .login-box input {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border-radius: 2rem;
+      background: rgba(34,197,94,0.05);
+      border: 1px solid rgba(74,222,128,0.2);
+      color: #86efac;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 1rem;
+    }
+    .login-box input::placeholder { color: #4ade80; opacity: 0.5; }
+    .login-box input:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+    .login-box button {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 2rem;
+      background: #22c55e;
+      border: none;
+      color: #052e16;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .login-box button:hover { background: #16a34a; }
+    .login-box .error { color: #fca5a5; font-size: 0.85rem; margin-top: 0.5rem; }
+
+    /* DASHBOARD */
+    .dashboard {
+      min-height: 100vh;
+      background: #0a0f0a;
+    }
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(74,222,128,0.08);
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,10,0.95);
+      backdrop-filter: blur(20px);
+      z-index: 10;
+    }
+    .dash-header h1 { font-size: 1.5rem; font-weight: 500; color: #86efac; }
+    .dash-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .toolbar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .toolbar button {
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(74,222,128,0.2);
+      background: rgba(34,197,94,0.03);
+      color: #86efac;
+      cursor: pointer;
       font-size: 0.9rem;
-    }
-    button:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99,102,241,0.4); }
-    button:active { transform: scale(0.97); }
-    .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
-    .btn-outline {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
-    .error-msg { color: #fca5a5; font-size: 0.85rem; margin-top: 0.3rem; }
-    .success-msg { color: #86efac; font-size: 0.85rem; margin-top: 0.3rem; }
-    .section {
-      background: rgba(0,0,0,0.3);
-      border-radius: 1.5rem;
-      padding: 1.2rem;
-      margin: 1rem 0;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .file-list {
-      background: rgba(0,0,0,0.25);
-      border-radius: 1.5rem;
-      padding: 0.8rem;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    .file-item {
+      transition: all 0.2s;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 0.8rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      gap: 0.5rem;
+      gap: 0.4rem;
+    }
+    .toolbar button:hover { background: rgba(34,197,94,0.1); border-color: rgba(74,222,128,0.4); }
+    .toolbar button.active { background: #22c55e; border-color: #22c55e; color: #052e16; font-weight: 600; }
+
+    /* FILE LIST */
+    .file-list-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .file-card {
+      background: rgba(34,197,94,0.02);
+      border: 1px solid rgba(74,222,128,0.08);
+      border-radius: 1.2rem;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .file-card:hover { background: rgba(34,197,94,0.06); transform: translateY(-2px); border-color: rgba(74,222,128,0.2); }
+    .file-preview {
+      width: 100%;
+      height: 180px;
+      background: #0a1a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .file-preview img, .file-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .file-preview .icon-preview {
+      font-size: 4rem;
+      opacity: 0.4;
+    }
+    .file-details {
+      padding: 0.8rem 1rem;
+    }
+    .file-details .name {
+      font-weight: 500;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #86efac;
+    }
+    .file-details .meta {
+      font-size: 0.75rem;
+      color: #4ade80;
+      margin-top: 0.2rem;
+    }
+    .file-actions-row {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0 1rem 0.8rem;
       flex-wrap: wrap;
     }
-    .file-item:last-child { border-bottom: none; }
-    .file-info { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 150px; }
-    .file-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-    .icon-btn {
-      background: rgba(255,255,255,0.05);
-      border: none;
-      color: #cbd5e1;
-      font-size: 1rem;
-      padding: 0.3rem 0.5rem;
-      border-radius: 0.5rem;
+    .file-actions-row button {
+      padding: 0.35rem 0.7rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(74,222,128,0.15);
+      background: rgba(34,197,94,0.03);
+      color: #86efac;
       cursor: pointer;
+      font-size: 0.75rem;
+      transition: all 0.2s;
     }
-    .icon-btn:hover { background: rgba(255,255,255,0.2); color: white; }
-    .empty-message { text-align: center; color: #94a3b8; padding: 2rem; }
-    label { color: #cbd5e1; font-size: 0.85rem; display: block; margin-bottom: 0.3rem; }
+    .file-actions-row button:hover { background: rgba(34,197,94,0.15); color: #bbf7d0; }
+    .file-actions-row .del-btn { color: #fca5a5; border-color: rgba(252,165,165,0.2); }
+    .file-actions-row .del-btn:hover { background: rgba(239,68,68,0.15); }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem;
+      color: #4ade80;
+      grid-column: 1 / -1;
+    }
+    .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 2px dashed rgba(74,222,128,0.15);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #86efac;
+    }
+    .upload-zone:hover { border-color: #22c55e; background: rgba(34,197,94,0.05); }
+    .upload-zone input { display: none; }
+
+    /* MODAL */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      display: flex; align-items: center; justify-content: center; z-index: 100;
+      position: fixed; inset: 0; background: rgba(5,20,5,0.9);
+      display: flex; align-items: center; justify-content: center; z-index: 200;
       padding: 1rem;
     }
-    .modal {
-      background: #1a1f2e;
+    .modal-box {
+      background: #0d1f0d;
       border-radius: 1.5rem;
       padding: 1.5rem;
-      width: 100%;
-      max-width: 500px;
-      border: 1px solid rgba(255,255,255,0.1);
+      width: 90%;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(74,222,128,0.15);
     }
-    .tag {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
+    .modal-box img, .modal-box video {
+      width: 100%;
       border-radius: 1rem;
-      font-size: 0.7rem;
-      background: rgba(139,92,246,0.3);
-      color: #c4b5fd;
+      max-height: 60vh;
+      object-fit: contain;
+    }
+    .modal-box audio { width: 100%; margin: 1rem 0; }
+    .modal-box iframe { width: 100%; height: 60vh; border: none; border-radius: 1rem; }
+    .modal-close {
+      float: right;
+      background: none;
+      border: none;
+      color: #86efac;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal-box a { color: #4ade80; }
+
+    .status-msg { padding: 0.5rem 1rem; border-radius: 1rem; font-size: 0.85rem; margin: 0.5rem 0; }
+    .status-success { background: rgba(34,197,94,0.1); color: #86efac; }
+    .status-error { background: rgba(239,68,68,0.1); color: #fca5a5; }
+
+    @media (max-width: 600px) {
+      .hero-content h1 { font-size: 2.5rem; }
+      .file-list-view { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="card" id="app">
-    <!-- LOCKED -->
-    <div id="lockedView">
-      <h1>🔐 <span>stor</span></h1>
-      <p style="color:#b9c2d9; margin: 0.5rem 0 1.5rem;">simple file manager</p>
-      <div class="row">
-        <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" style="flex:1;" />
-        <button id="unlockBtn">Unlock</button>
+  <!-- HOME PAGE -->
+  <div id="homePage" class="home-page">
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <h1>Curated Wallpapers</h1>
+        <p>Beautiful high-resolution images for your screen</p>
+        <button onclick="showLogin()">Enter Collection</button>
       </div>
-      <div id="passwordError" class="error-msg"></div>
-      <p style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem;">Default: <strong style="color:#a78bfa;">stor-demo</strong></p>
     </div>
+    <div class="gallery-section">
+      <h2>✨ Featured</h2>
+      <div class="gallery-grid" id="publicGallery"></div>
+    </div>
+    <button class="login-fab" onclick="showLogin()">🔑 Access Files</button>
+  </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboardView" class="hidden">
-      <div class="row" style="justify-content:space-between; margin-bottom:1rem;">
-        <h1>📁 <span>stor</span></h1>
-        <button id="logoutBtn" class="btn-outline btn-sm">Exit</button>
+  <!-- LOGIN MODAL -->
+  <div id="loginOverlay" class="login-overlay hidden">
+    <div class="login-box">
+      <h2>Access Files</h2>
+      <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="off" />
+      <button onclick="doLogin()">Unlock</button>
+      <div id="loginError" class="error"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardPage" class="dashboard hidden">
+    <div class="dash-header">
+      <h1>📁 File Manager</h1>
+      <button onclick="goHome()" style="background:rgba(34,197,94,0.05);border:1px solid rgba(74,222,128,0.2);color:#86efac;padding:0.5rem 1.2rem;border-radius:2rem;cursor:pointer;">← Home</button>
+    </div>
+    <div class="dash-content">
+      <!-- Upload -->
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <div style="font-size:2rem;">📤</div>
+        <p>Click to upload files</p>
+        <p style="font-size:0.8rem;opacity:0.7;">Images, Videos, Audio, PDFs, Text</p>
+        <input type="file" id="fileInput" multiple accept="*/*" />
+      </div>
+      <div id="uploadStatus"></div>
+
+      <!-- Filters -->
+      <div class="toolbar">
+        <button class="active" data-filter="all" onclick="setFilter('all', this)">📋 All</button>
+        <button data-filter="image" onclick="setFilter('image', this)">🖼️ Images</button>
+        <button data-filter="video" onclick="setFilter('video', this)">🎬 Video</button>
+        <button data-filter="audio" onclick="setFilter('audio', this)">🎵 Audio</button>
+        <button data-filter="raw" onclick="setFilter('raw', this)">📄 Docs</button>
+        <button onclick="loadFiles()" style="margin-left:auto;">🔄 Refresh</button>
       </div>
 
-      <!-- UPLOAD -->
-      <div class="section">
-        <h2>⬆️ Upload Files</h2>
-        <div class="row" style="margin-top:0.5rem;">
-          <label for="fileInput" style="cursor:pointer; background:#4f46e5; padding:0.5rem 1rem; border-radius:2rem; color:white; margin:0; display:inline-block;">📂 Choose Files</label>
-          <input type="file" id="fileInput" style="display:none;" multiple />
-          <button id="uploadBtn">Upload</button>
-        </div>
-        <div id="uploadStatus" style="margin-top:0.5rem; font-size:0.85rem;"></div>
-      </div>
-
-      <!-- CREATE TEXT FILE -->
-      <div class="section">
-        <h2>📝 Create Text File</h2>
-        <div style="margin-top:0.5rem;">
-          <label>File name:</label>
-          <input type="text" id="newFileName" placeholder="my-file.txt" />
-        </div>
-        <div style="margin-top:0.5rem;">
-          <label>Content:</label>
-          <textarea id="newFileContent" placeholder="Write something..."></textarea>
-        </div>
-        <button id="createFileBtn" class="btn-green" style="margin-top:0.5rem;">✨ Create File</button>
-        <div id="createStatus" style="margin-top:0.3rem; font-size:0.85rem;"></div>
-      </div>
-
-      <!-- FILE LIST -->
-      <div class="row" style="justify-content:space-between; margin-top:1rem;">
-        <h2>📋 Your Files</h2>
-        <button id="refreshBtn" class="btn-outline btn-sm">🔄 Refresh</button>
-      </div>
-      <div id="fileList" class="file-list">
-        <div class="empty-message">Loading...</div>
+      <!-- File Grid -->
+      <div class="file-list-view" id="fileGrid">
+        <div class="empty-state"><div class="icon">📂</div>Loading...</div>
       </div>
     </div>
   </div>
 
-  <!-- EDIT MODAL -->
-  <div id="editModal" class="modal-overlay hidden">
-    <div class="modal">
-      <h2>✏️ Edit File</h2>
-      <div style="margin-top:0.8rem;">
-        <label>File: <strong id="editFileName"></strong></label>
-      </div>
-      <div style="margin-top:0.5rem;">
-        <label>New Content:</label>
-        <textarea id="editContent"></textarea>
-      </div>
-      <div class="row" style="margin-top:1rem; justify-content:flex-end;">
-        <button id="cancelEditBtn" class="btn-outline btn-sm">Cancel</button>
-        <button id="saveEditBtn" class="btn-green btn-sm">💾 Save</button>
-      </div>
+  <!-- PREVIEW MODAL -->
+  <div id="previewModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closePreview()">✕</button>
+      <div id="previewContent"></div>
     </div>
   </div>
 
   <script>
-    // ⚙️ CONFIG
+    // CONFIG
     const WORKER_URL = 'https://stor-api.bookforpeace.workers.dev';
     const APP_PASSWORD = 'stor-demo';
     const CLOUD_NAME = 'dgdlrlyct';
     const UPLOAD_PRESET = 'stor_upload';
-    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
+    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
 
-    // 🧩 DOM
-    const lockedView = document.getElementById('lockedView');
-    const dashboardView = document.getElementById('dashboardView');
-    const passwordInput = document.getElementById('passwordInput');
-    const passwordError = document.getElementById('passwordError');
-    const unlockBtn = document.getElementById('unlockBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const uploadStatus = document.getElementById('uploadStatus');
-    const refreshBtn = document.getElementById('refreshBtn');
-    const fileList = document.getElementById('fileList');
-    const newFileName = document.getElementById('newFileName');
-    const newFileContent = document.getElementById('newFileContent');
-    const createFileBtn = document.getElementById('createFileBtn');
-    const createStatus = document.getElementById('createStatus');
-    const editModal = document.getElementById('editModal');
-    const editFileName = document.getElementById('editFileName');
-    const editContent = document.getElementById('editContent');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
-    const saveEditBtn = document.getElementById('saveEditBtn');
+    let allFiles = [];
+    let currentFilter = 'all';
 
-    let currentEditFile = null;
-
-    // 📥 LOAD FILES FROM WORKER
-    async function loadFiles() {
-      fileList.innerHTML = '<div class="empty-message">Loading...</div>';
+    // HOME PAGE - load public images as gallery
+    async function loadPublicGallery() {
       try {
         const res = await fetch(`${WORKER_URL}/list`);
         const data = await res.json();
-        const files = data.resources || [];
-        if (files.length === 0) {
-          fileList.innerHTML = '<div class="empty-message">✨ No files yet. Create or upload!</div>';
+        const images = (data.resources || []).filter(f => f.resource_type === 'image').slice(0, 12);
+        const grid = document.getElementById('publicGallery');
+        if (images.length === 0) {
+          grid.innerHTML = '<p style="color:#4ade80;grid-column:1/-1;text-align:center;">No wallpapers yet. Upload some!</p>';
           return;
         }
-        let html = '';
-        files.forEach(f => {
-          const name = (f.original_filename || 'file') + '.' + (f.format || 'txt');
-          const kb = (f.bytes / 1024).toFixed(1);
-          const isText = f.format === 'txt' || f.format === 'json' || f.format === 'csv' || f.format === 'html' || f.format === 'css' || f.format === 'js' || f.format === 'md';
-          html += `
-            <div class="file-item">
-              <div class="file-info">
-                <span>${isText ? '📄' : '🖼️'}</span>
-                <div>
-                  <strong>${name}</strong>
-                  <span class="tag">${kb} KB</span>
-                </div>
-              </div>
-              <div class="file-actions">
-                <a href="${f.secure_url}" target="_blank" class="icon-btn" title="View">👁️</a>
-                <button class="icon-btn" onclick="copyUrl('${f.secure_url}')" title="Copy URL">📋</button>
-                <button class="icon-btn" onclick="downloadFile('${f.secure_url}','${name}')" title="Download">⬇️</button>
-                ${isText ? `<button class="icon-btn" onclick="openEdit('${f.public_id}','${name}')" title="Edit">✏️</button>` : ''}
-                <button class="icon-btn" onclick="deleteFile('${f.public_id}')" title="Delete" style="color:#fca5a5;">🗑️</button>
-              </div>
-            </div>`;
-        });
-        fileList.innerHTML = html;
+        grid.innerHTML = images.map(f => `
+          <div class="gallery-card" onclick="showLogin()">
+            <img src="${f.secure_url}" alt="${f.original_filename}" loading="lazy" />
+            <div class="info"><span>${f.original_filename || 'wallpaper'}</span><span>${(f.bytes/1024).toFixed(0)} KB</span></div>
+          </div>
+        `).join('');
       } catch (e) {
-        fileList.innerHTML = '<div class="empty-message">⚠️ Error loading files. Check Worker.</div>';
-        console.error(e);
+        document.getElementById('publicGallery').innerHTML = '';
       }
     }
 
-    // 📋 COPY URL
-    window.copyUrl = (url) => {
-      navigator.clipboard.writeText(url).then(() => alert('✅ URL copied!')).catch(() => prompt('Copy:', url));
-    };
-
-    // ⬇️ DOWNLOAD
-    window.downloadFile = async (url, name) => {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = name;
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-
-    // 🗑️ DELETE
-    window.deleteFile = async (publicId) => {
-      if (!confirm('Delete this file permanently?')) return;
-      try {
-        await fetch(`${WORKER_URL}/delete`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ publicId }),
-        });
+    // LOGIN
+    function showLogin() {
+      document.getElementById('loginOverlay').classList.remove('hidden');
+      document.getElementById('loginPassword').focus();
+    }
+    function hideLogin() {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginError').textContent = '';
+    }
+    function doLogin() {
+      if (document.getElementById('loginPassword').value === APP_PASSWORD) {
+        hideLogin();
+        document.getElementById('homePage').classList.add('hidden');
+        document.getElementById('dashboardPage').classList.remove('hidden');
         loadFiles();
-      } catch (e) {
-        alert('Delete failed');
+      } else {
+        document.getElementById('loginError').textContent = 'Incorrect password';
       }
-    };
+    }
+    document.getElementById('loginPassword').addEventListener('keypress', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+    document.getElementById('loginOverlay').addEventListener('click', function(e) {
+      if (e.target === this) hideLogin();
+    });
 
-    // ✏️ EDIT
-    window.openEdit = async (publicId, name) => {
-      currentEditFile = { publicId, name };
-      editFileName.textContent = name;
-      
-      // Fetch current content
+    function goHome() {
+      document.getElementById('dashboardPage').classList.add('hidden');
+      document.getElementById('homePage').classList.remove('hidden');
+      loadPublicGallery();
+    }
+
+    // LOAD FILES
+    async function loadFiles() {
+      const grid = document.getElementById('fileGrid');
+      grid.innerHTML = '<div class="empty-state"><div class="icon">⏳</div>Loading files...</div>';
       try {
-        const res = await fetch(`${WORKER_URL}/get-content?publicId=${encodeURIComponent(publicId)}`);
+        const res = await fetch(`${WORKER_URL}/list`);
         const data = await res.json();
-        editContent.value = data.content || '';
-      } catch {
-        editContent.value = '';
-      }
-      
-      editModal.classList.remove('hidden');
-    };
-
-    cancelEditBtn.onclick = () => {
-      editModal.classList.add('hidden');
-      currentEditFile = null;
-    };
-
-    saveEditBtn.onclick = async () => {
-      if (!currentEditFile) return;
-      try {
-        const res = await fetch(`${WORKER_URL}/edit`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            publicId: currentEditFile.publicId,
-            content: editContent.value,
-            filename: currentEditFile.name,
-          }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('✅ File updated!');
-          editModal.classList.add('hidden');
-          loadFiles();
-        } else {
-          alert('❌ Update failed: ' + (data.error || ''));
-        }
+        allFiles = data.resources || [];
+        renderFiles();
       } catch (e) {
-        alert('Error saving');
+        grid.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>Failed to load. Check connection.</div>';
       }
-    };
+    }
 
-    // 📤 UPLOAD
-    uploadBtn.onclick = () => {
-      if (!fileInput.files || fileInput.files.length === 0) {
-        uploadStatus.innerHTML = '<span style="color:#fca5a5;">Please select files first</span>';
+    function getFileType(file) {
+      if (file.resource_type === 'video') return 'video';
+      if (file.resource_type === 'image') return 'image';
+      if (file.resource_type === 'raw') return 'raw';
+      if (file.format === 'mp3' || file.format === 'wav' || file.format === 'ogg' || file.format === 'm4a') return 'audio';
+      if (file.format === 'pdf') return 'raw';
+      return 'raw';
+    }
+
+    function renderFiles() {
+      const grid = document.getElementById('fileGrid');
+      let files = allFiles;
+      if (currentFilter !== 'all') {
+        files = files.filter(f => getFileType(f) === currentFilter);
+      }
+
+      if (files.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No files found</p><p style="font-size:0.8rem;">Upload something to get started</p></div>';
         return;
       }
-      uploadFiles(fileInput.files);
-    };
 
-    async function uploadFiles(files) {
-      uploadStatus.textContent = `Uploading ${files.length} file(s)...`;
+      grid.innerHTML = files.map(f => {
+        const type = getFileType(f);
+        const name = (f.original_filename || 'file') + '.' + (f.format || '');
+        const kb = (f.bytes / 1024).toFixed(1);
+        let preview = '';
+
+        if (type === 'image') {
+          preview = `<img src="${f.secure_url}" alt="${name}" loading="lazy" />`;
+        } else if (type === 'video') {
+          preview = `<video src="${f.secure_url}" muted preload="metadata"></video>`;
+        } else if (type === 'audio') {
+          preview = `<div class="icon-preview">🎵</div>`;
+        } else {
+          const icon = f.format === 'pdf' ? '📕' : '📄';
+          preview = `<div class="icon-preview">${icon}</div>`;
+        }
+
+        return `
+          <div class="file-card">
+            <div class="file-preview" onclick="previewFile('${f.public_id}', '${type}', '${f.secure_url}', '${name}')" style="cursor:pointer;">
+              ${preview}
+            </div>
+            <div class="file-details">
+              <div class="name" title="${name}">${name}</div>
+              <div class="meta">${type} · ${kb} KB</div>
+            </div>
+            <div class="file-actions-row">
+              <button onclick="copyUrl('${f.secure_url}')">📋 Copy</button>
+              <button onclick="downloadFile('${f.secure_url}','${name}')">⬇️</button>
+              <button onclick="previewFile('${f.public_id}', '${type}', '${f.secure_url}', '${name}')">👁 View</button>
+              <button class="del-btn" onclick="deleteFile('${f.public_id}')">🗑</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.toolbar button[data-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderFiles();
+    }
+
+    // PREVIEW
+    function previewFile(publicId, type, url, name) {
+      const modal = document.getElementById('previewModal');
+      const content = document.getElementById('previewContent');
+
+      if (type === 'image') {
+        content.innerHTML = `<img src="${url}" alt="${name}" />`;
+      } else if (type === 'video') {
+        content.innerHTML = `<video src="${url}" controls autoplay style="width:100%;max-height:60vh;border-radius:1rem;"></video>`;
+      } else if (type === 'audio') {
+        content.innerHTML = `<div style="text-align:center;padding:2rem;color:#86efac;"><h3>🎵 ${name}</h3><audio src="${url}" controls style="width:100%;margin-top:1rem;"></audio></div>`;
+      } else if (name.endsWith('.pdf')) {
+        content.innerHTML = `<iframe src="${url}"></iframe><p style="text-align:center;margin-top:0.5rem;"><a href="${url}" target="_blank">Open PDF in new tab</a></p>`;
+      } else {
+        content.innerHTML = `<div style="text-align:center;padding:2rem;color:#86efac;"><p>📄 ${name}</p><a href="${url}" target="_blank">Open file</a></div>`;
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closePreview() {
+      document.getElementById('previewModal').classList.add('hidden');
+      document.getElementById('previewContent').innerHTML = '';
+    }
+    document.getElementById('previewModal').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    // UPLOAD
+    document.getElementById('fileInput').addEventListener('change', async function() {
+      const files = this.files;
+      if (!files.length) return;
+      const status = document.getElementById('uploadStatus');
+      status.innerHTML = '<div class="status-msg">Uploading...</div>';
       let done = 0;
       for (let file of files) {
         const fd = new FormData();
@@ -402,77 +606,61 @@
           await fetch(UPLOAD_URL, { method: 'POST', body: fd });
           done++;
         } catch (e) {
-          uploadStatus.innerHTML = `<span style="color:#fca5a5;">Failed: ${file.name}</span>`;
+          status.innerHTML = `<div class="status-msg status-error">Failed: ${file.name}</div>`;
           return;
         }
       }
-      uploadStatus.innerHTML = `<span style="color:#86efac;">✅ ${done} file(s) uploaded!</span>`;
-      fileInput.value = '';
+      status.innerHTML = `<div class="status-msg status-success">✅ ${done} file(s) uploaded!</div>`;
+      this.value = '';
+      loadFiles();
+      setTimeout(() => { status.innerHTML = ''; }, 3000);
+    });
+
+    // DELETE
+    async function deleteFile(publicId) {
+      if (!confirm('Delete permanently?')) return;
+      await fetch(`${WORKER_URL}/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId }),
+      });
       loadFiles();
     }
 
-    // 📝 CREATE TEXT FILE
-    createFileBtn.onclick = async () => {
-      const name = newFileName.value.trim();
-      const content = newFileContent.value;
-      
-      if (!name) {
-        createStatus.innerHTML = '<span style="color:#fca5a5;">Enter a file name</span>';
-        return;
+    // COPY
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url).then(() => alert('✅ URL copied!')).catch(() => prompt('Copy:', url));
+    }
+
+    // DOWNLOAD
+    function downloadFile(url, name) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.target = '_blank';
+      a.click();
+    }
+
+    // KEYBOARD
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        hideLogin();
+        closePreview();
       }
-      if (!name.includes('.')) {
-        createStatus.innerHTML = '<span style="color:#fca5a5;">Add extension like .txt</span>';
-        return;
-      }
-
-      createStatus.textContent = 'Creating...';
-      try {
-        const res = await fetch(`${WORKER_URL}/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ filename: name, content }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          createStatus.innerHTML = '<span style="color:#86efac;">✅ File created!</span>';
-          newFileName.value = '';
-          newFileContent.value = '';
-          loadFiles();
-        } else {
-          createStatus.innerHTML = `<span style="color:#fca5a5;">${data.error || 'Failed'}</span>`;
-        }
-      } catch (e) {
-        createStatus.innerHTML = '<span style="color:#fca5a5;">Error creating file</span>';
-      }
-    };
-
-    // 🔄 REFRESH
-    refreshBtn.onclick = loadFiles;
-
-    // 🔐 AUTH
-    unlockBtn.onclick = () => {
-      if (passwordInput.value === APP_PASSWORD) {
-        lockedView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
-        loadFiles();
-      } else {
-        passwordError.textContent = 'Wrong password';
-      }
-    };
-    passwordInput.onkeypress = (e) => { if (e.key === 'Enter') unlockBtn.click(); };
-
-    logoutBtn.onclick = () => {
-      dashboardView.classList.add('hidden');
-      lockedView.classList.remove('hidden');
-      passwordInput.value = '';
-      passwordError.textContent = '';
-    };
-
-    // Click on "Choose Files" label
-    document.querySelector('label[for="fileInput"]').addEventListener('click', (e) => {
-      e.preventDefault();
-      fileInput.click();
     });
+
+    // INIT
+    loadPublicGallery();
+    window.deleteFile = deleteFile;
+    window.copyUrl = copyUrl;
+    window.downloadFile = downloadFile;
+    window.previewFile = previewFile;
+    window.setFilter = setFilter;
+    window.loadFiles = loadFiles;
+    window.showLogin = showLogin;
+    window.doLogin = doLogin;
+    window.goHome = goHome;
+    window.closePreview = closePreview;
   </script>
 </body>
 </html>
