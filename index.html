@@ -28,7 +28,7 @@
     }
     .card {
       width: 100%;
-      max-width: 750px;
+      max-width: 800px;
       background: rgba(18, 22, 33, 0.85);
       backdrop-filter: blur(20px);
       border-radius: 2.5rem;
@@ -36,10 +36,12 @@
       box-shadow: 0 25px 45px rgba(0,0,0,0.6);
       color: #eef2ff;
       border: 1px solid rgba(255,255,255,0.08);
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .hidden { display: none !important; }
     h1 {
-      font-size: 2.4rem;
+      font-size: 2rem;
       font-weight: 500;
       color: #fff;
     }
@@ -48,112 +50,162 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    input {
-      flex: 2;
-      min-width: 180px;
+    h2 { font-size: 1.2rem; font-weight: 400; margin-bottom: 0.5rem; }
+    input, textarea {
+      width: 100%;
       background: rgba(10,14,23,0.7);
       border: 1px solid rgba(255,255,255,0.15);
-      padding: 0.9rem 1.2rem;
-      border-radius: 2.5rem;
-      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 1.5rem;
+      font-size: 0.95rem;
       color: white;
       outline: none;
+      font-family: inherit;
     }
-    input:focus {
+    textarea {
+      border-radius: 1rem;
+      resize: vertical;
+      min-height: 100px;
+    }
+    input:focus, textarea:focus {
       border-color: #8b5cf6;
       box-shadow: 0 0 0 2px rgba(139,92,246,0.3);
     }
     button {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       border: none;
-      padding: 0.9rem 1.8rem;
-      border-radius: 2.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 2rem;
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: all 0.2s;
+      font-size: 0.9rem;
     }
-    button:hover { transform: translateY(-1px); }
-    .secondary-btn {
+    button:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99,102,241,0.4); }
+    button:active { transform: scale(0.97); }
+    .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+    .btn-outline {
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 0.5rem 1.2rem;
     }
-    .input-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-    .error-msg { color: #fca5a5; font-size: 0.9rem; }
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .upload-section {
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+    .error-msg { color: #fca5a5; font-size: 0.85rem; margin-top: 0.3rem; }
+    .success-msg { color: #86efac; font-size: 0.85rem; margin-top: 0.3rem; }
+    .section {
       background: rgba(0,0,0,0.3);
-      border-radius: 2rem;
-      padding: 1.4rem 1.2rem;
-      border: 1px dashed rgba(255,255,255,0.25);
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border: 1px solid rgba(255,255,255,0.06);
     }
     .file-list {
       background: rgba(0,0,0,0.25);
-      border-radius: 1.8rem;
-      padding: 1rem;
-      max-height: 350px;
+      border-radius: 1.5rem;
+      padding: 0.8rem;
+      max-height: 300px;
       overflow-y: auto;
     }
     .file-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.8rem 1rem;
+      padding: 0.6rem 0.8rem;
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
-    .file-info { display: flex; align-items: center; gap: 0.7rem; }
+    .file-item:last-child { border-bottom: none; }
+    .file-info { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 150px; }
+    .file-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
     .icon-btn {
       background: rgba(255,255,255,0.05);
       border: none;
       color: #cbd5e1;
-      font-size: 1.2rem;
+      font-size: 1rem;
       padding: 0.3rem 0.5rem;
-      border-radius: 0.6rem;
+      border-radius: 0.5rem;
       cursor: pointer;
     }
     .icon-btn:hover { background: rgba(255,255,255,0.2); color: white; }
     .empty-message { text-align: center; color: #94a3b8; padding: 2rem; }
-    label { color: #9ca3af; font-size: 0.9rem; }
+    label { color: #cbd5e1; font-size: 0.85rem; display: block; margin-bottom: 0.3rem; }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+      padding: 1rem;
+    }
+    .modal {
+      background: #1a1f2e;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      background: rgba(139,92,246,0.3);
+      color: #c4b5fd;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="app">
     <!-- LOCKED -->
     <div id="lockedView">
       <h1>🔐 <span>stor</span></h1>
       <p style="color:#b9c2d9; margin: 0.5rem 0 1.5rem;">simple file manager</p>
-      <div class="input-group">
-        <input type="password" id="passwordInput" placeholder="Password" autocomplete="off" />
+      <div class="row">
+        <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" style="flex:1;" />
         <button id="unlockBtn">Unlock</button>
       </div>
       <div id="passwordError" class="error-msg"></div>
-      <p style="font-size:0.8rem; color:#6b7280; margin-top:0.5rem;">Default: <strong style="color:#a78bfa;">stor-demo</strong></p>
+      <p style="font-size:0.75rem; color:#6b7280; margin-top:0.5rem;">Default: <strong style="color:#a78bfa;">stor-demo</strong></p>
     </div>
 
     <!-- DASHBOARD -->
     <div id="dashboardView" class="hidden">
-      <div class="dashboard-header">
+      <div class="row" style="justify-content:space-between; margin-bottom:1rem;">
         <h1>📁 <span>stor</span></h1>
-        <button id="logoutBtn" class="secondary-btn">Exit</button>
+        <button id="logoutBtn" class="btn-outline btn-sm">Exit</button>
       </div>
-      <div class="upload-section">
-        <div class="input-group">
-          <label for="fileInput" style="cursor:pointer; background:#4f46e5; padding:0.6rem 1.4rem; border-radius:2rem; color:white;">Choose file</label>
+
+      <!-- UPLOAD -->
+      <div class="section">
+        <h2>⬆️ Upload Files</h2>
+        <div class="row" style="margin-top:0.5rem;">
+          <label for="fileInput" style="cursor:pointer; background:#4f46e5; padding:0.5rem 1rem; border-radius:2rem; color:white; margin:0; display:inline-block;">📂 Choose Files</label>
           <input type="file" id="fileInput" style="display:none;" multiple />
           <button id="uploadBtn">Upload</button>
         </div>
-        <div id="uploadStatus" style="margin-top:0.8rem; font-size:0.9rem; color:#cbd5e1;"></div>
+        <div id="uploadStatus" style="margin-top:0.5rem; font-size:0.85rem;"></div>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
-        <h3>📋 Files</h3>
-        <button id="refreshBtn" class="secondary-btn">Refresh</button>
+
+      <!-- CREATE TEXT FILE -->
+      <div class="section">
+        <h2>📝 Create Text File</h2>
+        <div style="margin-top:0.5rem;">
+          <label>File name:</label>
+          <input type="text" id="newFileName" placeholder="my-file.txt" />
+        </div>
+        <div style="margin-top:0.5rem;">
+          <label>Content:</label>
+          <textarea id="newFileContent" placeholder="Write something..."></textarea>
+        </div>
+        <button id="createFileBtn" class="btn-green" style="margin-top:0.5rem;">✨ Create File</button>
+        <div id="createStatus" style="margin-top:0.3rem; font-size:0.85rem;"></div>
+      </div>
+
+      <!-- FILE LIST -->
+      <div class="row" style="justify-content:space-between; margin-top:1rem;">
+        <h2>📋 Your Files</h2>
+        <button id="refreshBtn" class="btn-outline btn-sm">🔄 Refresh</button>
       </div>
       <div id="fileList" class="file-list">
         <div class="empty-message">Loading...</div>
@@ -161,15 +213,33 @@
     </div>
   </div>
 
+  <!-- EDIT MODAL -->
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>✏️ Edit File</h2>
+      <div style="margin-top:0.8rem;">
+        <label>File: <strong id="editFileName"></strong></label>
+      </div>
+      <div style="margin-top:0.5rem;">
+        <label>New Content:</label>
+        <textarea id="editContent"></textarea>
+      </div>
+      <div class="row" style="margin-top:1rem; justify-content:flex-end;">
+        <button id="cancelEditBtn" class="btn-outline btn-sm">Cancel</button>
+        <button id="saveEditBtn" class="btn-green btn-sm">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // CONFIG
+    // ⚙️ CONFIG
     const WORKER_URL = 'https://stor-api.bookforpeace.workers.dev';
     const APP_PASSWORD = 'stor-demo';
     const CLOUD_NAME = 'dgdlrlyct';
     const UPLOAD_PRESET = 'stor_upload';
     const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
 
-    // DOM
+    // 🧩 DOM
     const lockedView = document.getElementById('lockedView');
     const dashboardView = document.getElementById('dashboardView');
     const passwordInput = document.getElementById('passwordInput');
@@ -181,8 +251,19 @@
     const uploadStatus = document.getElementById('uploadStatus');
     const refreshBtn = document.getElementById('refreshBtn');
     const fileList = document.getElementById('fileList');
+    const newFileName = document.getElementById('newFileName');
+    const newFileContent = document.getElementById('newFileContent');
+    const createFileBtn = document.getElementById('createFileBtn');
+    const createStatus = document.getElementById('createStatus');
+    const editModal = document.getElementById('editModal');
+    const editFileName = document.getElementById('editFileName');
+    const editContent = document.getElementById('editContent');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const saveEditBtn = document.getElementById('saveEditBtn');
 
-    // FETCH FILES FROM WORKER
+    let currentEditFile = null;
+
+    // 📥 LOAD FILES FROM WORKER
     async function loadFiles() {
       fileList.innerHTML = '<div class="empty-message">Loading...</div>';
       try {
@@ -190,65 +271,185 @@
         const data = await res.json();
         const files = data.resources || [];
         if (files.length === 0) {
-          fileList.innerHTML = '<div class="empty-message">✨ No files yet. Upload something!</div>';
+          fileList.innerHTML = '<div class="empty-message">✨ No files yet. Create or upload!</div>';
           return;
         }
         let html = '';
         files.forEach(f => {
-          const name = (f.original_filename || 'file') + '.' + (f.format || '');
+          const name = (f.original_filename || 'file') + '.' + (f.format || 'txt');
           const kb = (f.bytes / 1024).toFixed(1);
+          const isText = f.format === 'txt' || f.format === 'json' || f.format === 'csv' || f.format === 'html' || f.format === 'css' || f.format === 'js' || f.format === 'md';
           html += `
             <div class="file-item">
-              <div class="file-info"><span>📄</span><div><strong>${name}</strong><br><small style="color:#9ca3af;">${kb} KB</small></div></div>
+              <div class="file-info">
+                <span>${isText ? '📄' : '🖼️'}</span>
+                <div>
+                  <strong>${name}</strong>
+                  <span class="tag">${kb} KB</span>
+                </div>
+              </div>
               <div class="file-actions">
-                <a href="${f.secure_url}" target="_blank" class="icon-btn">👁️</a>
-                <button class="icon-btn" onclick="copyUrl('${f.secure_url}')">📋</button>
-                <button class="icon-btn" onclick="deleteFile('${f.public_id}')">🗑️</button>
+                <a href="${f.secure_url}" target="_blank" class="icon-btn" title="View">👁️</a>
+                <button class="icon-btn" onclick="copyUrl('${f.secure_url}')" title="Copy URL">📋</button>
+                <button class="icon-btn" onclick="downloadFile('${f.secure_url}','${name}')" title="Download">⬇️</button>
+                ${isText ? `<button class="icon-btn" onclick="openEdit('${f.public_id}','${name}')" title="Edit">✏️</button>` : ''}
+                <button class="icon-btn" onclick="deleteFile('${f.public_id}')" title="Delete" style="color:#fca5a5;">🗑️</button>
               </div>
             </div>`;
         });
         fileList.innerHTML = html;
       } catch (e) {
-        fileList.innerHTML = '<div class="empty-message">⚠️ Error loading files</div>';
+        fileList.innerHTML = '<div class="empty-message">⚠️ Error loading files. Check Worker.</div>';
+        console.error(e);
       }
     }
 
-    // COPY
+    // 📋 COPY URL
     window.copyUrl = (url) => {
-      navigator.clipboard.writeText(url).then(() => alert('URL copied!'));
+      navigator.clipboard.writeText(url).then(() => alert('✅ URL copied!')).catch(() => prompt('Copy:', url));
     };
 
-    // DELETE
+    // ⬇️ DOWNLOAD
+    window.downloadFile = async (url, name) => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    // 🗑️ DELETE
     window.deleteFile = async (publicId) => {
       if (!confirm('Delete this file permanently?')) return;
-      await fetch(`${WORKER_URL}/delete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ publicId }),
-      });
-      loadFiles();
+      try {
+        await fetch(`${WORKER_URL}/delete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId }),
+        });
+        loadFiles();
+      } catch (e) {
+        alert('Delete failed');
+      }
     };
 
-    // UPLOAD
+    // ✏️ EDIT
+    window.openEdit = async (publicId, name) => {
+      currentEditFile = { publicId, name };
+      editFileName.textContent = name;
+      
+      // Fetch current content
+      try {
+        const res = await fetch(`${WORKER_URL}/get-content?publicId=${encodeURIComponent(publicId)}`);
+        const data = await res.json();
+        editContent.value = data.content || '';
+      } catch {
+        editContent.value = '';
+      }
+      
+      editModal.classList.remove('hidden');
+    };
+
+    cancelEditBtn.onclick = () => {
+      editModal.classList.add('hidden');
+      currentEditFile = null;
+    };
+
+    saveEditBtn.onclick = async () => {
+      if (!currentEditFile) return;
+      try {
+        const res = await fetch(`${WORKER_URL}/edit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            publicId: currentEditFile.publicId,
+            content: editContent.value,
+            filename: currentEditFile.name,
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('✅ File updated!');
+          editModal.classList.add('hidden');
+          loadFiles();
+        } else {
+          alert('❌ Update failed: ' + (data.error || ''));
+        }
+      } catch (e) {
+        alert('Error saving');
+      }
+    };
+
+    // 📤 UPLOAD
+    uploadBtn.onclick = () => {
+      if (!fileInput.files || fileInput.files.length === 0) {
+        uploadStatus.innerHTML = '<span style="color:#fca5a5;">Please select files first</span>';
+        return;
+      }
+      uploadFiles(fileInput.files);
+    };
+
     async function uploadFiles(files) {
       uploadStatus.textContent = `Uploading ${files.length} file(s)...`;
+      let done = 0;
       for (let file of files) {
         const fd = new FormData();
         fd.append('file', file);
         fd.append('upload_preset', UPLOAD_PRESET);
         try {
           await fetch(UPLOAD_URL, { method: 'POST', body: fd });
+          done++;
         } catch (e) {
-          uploadStatus.textContent = 'Upload failed';
+          uploadStatus.innerHTML = `<span style="color:#fca5a5;">Failed: ${file.name}</span>`;
           return;
         }
       }
-      uploadStatus.textContent = '✅ Done!';
+      uploadStatus.innerHTML = `<span style="color:#86efac;">✅ ${done} file(s) uploaded!</span>`;
       fileInput.value = '';
       loadFiles();
     }
 
-    // AUTH
+    // 📝 CREATE TEXT FILE
+    createFileBtn.onclick = async () => {
+      const name = newFileName.value.trim();
+      const content = newFileContent.value;
+      
+      if (!name) {
+        createStatus.innerHTML = '<span style="color:#fca5a5;">Enter a file name</span>';
+        return;
+      }
+      if (!name.includes('.')) {
+        createStatus.innerHTML = '<span style="color:#fca5a5;">Add extension like .txt</span>';
+        return;
+      }
+
+      createStatus.textContent = 'Creating...';
+      try {
+        const res = await fetch(`${WORKER_URL}/create`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: name, content }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          createStatus.innerHTML = '<span style="color:#86efac;">✅ File created!</span>';
+          newFileName.value = '';
+          newFileContent.value = '';
+          loadFiles();
+        } else {
+          createStatus.innerHTML = `<span style="color:#fca5a5;">${data.error || 'Failed'}</span>`;
+        }
+      } catch (e) {
+        createStatus.innerHTML = '<span style="color:#fca5a5;">Error creating file</span>';
+      }
+    };
+
+    // 🔄 REFRESH
+    refreshBtn.onclick = loadFiles;
+
+    // 🔐 AUTH
     unlockBtn.onclick = () => {
       if (passwordInput.value === APP_PASSWORD) {
         lockedView.classList.add('hidden');
@@ -259,18 +460,19 @@
       }
     };
     passwordInput.onkeypress = (e) => { if (e.key === 'Enter') unlockBtn.click(); };
+
     logoutBtn.onclick = () => {
       dashboardView.classList.add('hidden');
       lockedView.classList.remove('hidden');
       passwordInput.value = '';
+      passwordError.textContent = '';
     };
 
-    // BUTTONS
-    uploadBtn.onclick = () => {
-      if (fileInput.files.length) uploadFiles(fileInput.files);
-      else uploadStatus.textContent = 'Select a file first';
-    };
-    refreshBtn.onclick = loadFiles;
+    // Click on "Choose Files" label
+    document.querySelector('label[for="fileInput"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      fileInput.click();
+    });
   </script>
 </body>
 </html>
