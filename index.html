@@ -4,80 +4,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0f0a">
   <title>File Manager</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; min-height:-webkit-fill-available; overflow-x:hidden; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; min-height:-webkit-fill-available; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
     html { height:-webkit-fill-available; }
-    input,textarea { -webkit-appearance:none; outline:none; font-family:inherit; }
-    button { cursor:pointer; border:none; }
+    input,textarea { -webkit-appearance:none; appearance:none; outline:none; font-family:inherit; font-size:16px; }
+    button { cursor:pointer; border:none; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
     .hidden { display:none!important; }
-    .lock-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+    
+    .lock-screen { min-height:100vh; min-height:-webkit-fill-available; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
     .lock-box { width:100%; max-width:340px; text-align:center; }
-    .lock-box h1 { font-size:1.8rem; margin-bottom:1.5rem; }
-    .lock-box input { width:100%; padding:0.9rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:1rem; text-align:center; }
+    .lock-box h1 { font-size:clamp(1.5rem,5vw,1.8rem); margin-bottom:1.5rem; }
+    .lock-box input { width:100%; padding:0.9rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; text-align:center; }
     .lock-box button { width:100%; padding:0.9rem; margin-top:0.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:700; font-size:1rem; }
-    .home-page { min-height:100vh; }
+    
+    .home-page { min-height:100vh; min-height:-webkit-fill-available; }
     .hero { position:relative; height:50vh; min-height:300px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .hero-bg { position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80') center/cover; filter:brightness(0.35); }
-    .hero-content { position:relative; text-align:center; }
-    .hero-content h1 { font-size:1.8rem; }
-    .hero-content p { font-size:0.85rem; color:#4ade80; margin:0.5rem 0 1rem; }
-    .cta { padding:0.7rem 1.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:600; }
-    .gallery-section { padding:1.2rem 0.8rem; }
-    .gallery-scroll { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; -webkit-overflow-scrolling:touch; }
+    .hero-content { position:relative; text-align:center; padding:1rem; }
+    .hero-content h1 { font-size:clamp(1.5rem,6vw,1.8rem); }
+    .hero-content p { font-size:clamp(0.75rem,3vw,0.85rem); color:#4ade80; margin:0.5rem 0 1rem; }
+    .cta { display:inline-block; padding:0.7rem 1.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:600; font-size:0.95rem; text-decoration:none; }
+    .gallery-section { padding:1rem 0.8rem; }
+    .gallery-scroll { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; }
     .gallery-scroll::-webkit-scrollbar { display:none; }
-    .gallery-card { flex:0 0 70vw; max-width:280px; border-radius:0.8rem; overflow:hidden; background:rgba(34,197,94,0.03); border:1px solid rgba(74,222,128,0.1); cursor:pointer; }
-    .gallery-card img { width:100%; height:180px; object-fit:cover; }
+    .gallery-card { flex:0 0 75vw; max-width:280px; scroll-snap-align:start; border-radius:0.8rem; overflow:hidden; background:rgba(34,197,94,0.03); border:1px solid rgba(74,222,128,0.1); cursor:pointer; }
+    .gallery-card img { width:100%; height:180px; object-fit:cover; display:block; }
     .gallery-card .info { padding:0.5rem 0.7rem; font-size:0.7rem; display:flex; justify-content:space-between; }
-    .fab { position:fixed; bottom:1rem; right:1rem; z-index:50; width:50px; height:50px; border-radius:50%; background:#22c55e; color:#052e16; font-size:1.4rem; box-shadow:0 4px 20px rgba(34,197,94,0.5); display:flex; align-items:center; justify-content:center; }
-    .dashboard { min-height:100vh; padding-bottom:5.5rem; }
-    .dash-header { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0.9rem; border-bottom:1px solid rgba(74,222,128,0.1); position:sticky; top:0; background:#0a0f0a; z-index:10; }
-    .dash-header h1 { font-size:1rem; }
+    .fab { position:fixed; bottom:5rem; right:1rem; z-index:50; width:50px; height:50px; border-radius:50%; background:#22c55e; color:#052e16; font-size:1.4rem; box-shadow:0 4px 20px rgba(34,197,94,0.5); display:flex; align-items:center; justify-content:center; }
+    
+    .dashboard { min-height:100vh; min-height:-webkit-fill-available; padding-bottom:4.5rem; }
+    .dash-header { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0.9rem; border-bottom:1px solid rgba(74,222,128,0.1); position:sticky; top:0; background:#0a0f0a; z-index:10; backdrop-filter:blur(10px); }
+    .dash-header h1 { font-size:clamp(0.9rem,3vw,1rem); }
     .dash-content { padding:0.7rem; }
     .upload-zone { display:block; padding:1rem; margin-bottom:0.5rem; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:0.8rem; text-align:center; cursor:pointer; font-size:0.85rem; }
     input[type="file"] { display:none; }
     .status { text-align:center; font-size:0.75rem; padding:0.3rem; min-height:1.2rem; }
     .status.ok { color:#4ade80; }
-    .search-box { width:100%; padding:0.6rem 1rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.03); color:#86efac; font-size:0.8rem; margin-bottom:0.5rem; }
-    .breadcrumb { display:flex; gap:0.2rem; flex-wrap:wrap; margin-bottom:0.5rem; font-size:0.75rem; align-items:center; }
-    .breadcrumb span { color:#4ade80; cursor:pointer; }
+    .search-box { width:100%; padding:0.6rem 1rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.03); color:#86efac; font-size:16px; margin-bottom:0.5rem; }
+    .breadcrumb { display:flex; gap:0.2rem; flex-wrap:wrap; margin-bottom:0.5rem; font-size:0.7rem; align-items:center; }
+    .breadcrumb span { color:#4ade80; cursor:pointer; padding:0.2rem 0; }
     .file-list { display:flex; flex-direction:column; gap:0.3rem; }
-    .file-row { display:flex; align-items:center; gap:0.5rem; background:rgba(34,197,94,0.02); border:1px solid rgba(74,222,128,0.06); border-radius:0.6rem; padding:0.6rem 0.5rem; cursor:pointer; }
-    .file-thumb { width:42px; height:42px; border-radius:0.35rem; flex-shrink:0; background:#0a1a0a; display:flex; align-items:center; justify-content:center; font-size:1.3rem; overflow:hidden; }
+    .file-row { display:flex; align-items:center; gap:0.5rem; background:rgba(34,197,94,0.02); border:1px solid rgba(74,222,128,0.06); border-radius:0.6rem; padding:0.55rem 0.5rem; cursor:pointer; min-height:52px; }
+    .file-row:active { background:rgba(34,197,94,0.08); }
+    .file-thumb { width:40px; height:40px; border-radius:0.35rem; flex-shrink:0; background:#0a1a0a; display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
     .file-thumb img { width:100%; height:100%; object-fit:cover; }
     .file-info { flex:1; min-width:0; }
-    .file-name { font-size:0.8rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .file-meta { font-size:0.62rem; color:#4ade80; }
-    .file-btns { display:flex; gap:0.15rem; flex-shrink:0; }
-    .file-btns button { width:28px; height:28px; border-radius:0.35rem; font-size:0.7rem; border:1px solid rgba(74,222,128,0.15); background:rgba(34,197,94,0.03); color:#86efac; display:flex; align-items:center; justify-content:center; }
+    .file-name { font-size:0.78rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .file-meta { font-size:0.6rem; color:#4ade80; }
+    .file-btns { display:flex; gap:0.2rem; flex-shrink:0; }
+    .file-btns button { width:30px; height:30px; border-radius:0.35rem; font-size:0.75rem; border:1px solid rgba(74,222,128,0.15); background:rgba(34,197,94,0.03); color:#86efac; display:flex; align-items:center; justify-content:center; min-width:30px; min-height:30px; }
     .file-btns .del { color:#fca5a5; }
     .file-btns .share { color:#60a5fa; }
-    .empty-state { text-align:center; padding:2.5rem; color:#4ade80; opacity:0.5; }
-    .bottom-bar { position:fixed; bottom:0; left:0; right:0; padding:0.5rem 0.7rem; padding-bottom:max(0.5rem,env(safe-area-inset-bottom)); background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); display:flex; gap:0.3rem; }
-    .bottom-bar button { flex:1; padding:0.55rem; border-radius:1.5rem; font-weight:600; font-size:0.68rem; }
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:#4ade80; opacity:0.5; }
+    
+    .bottom-bar { position:fixed; bottom:0; left:0; right:0; padding:0.5rem 0.5rem; padding-bottom:max(0.5rem,env(safe-area-inset-bottom)); background:rgba(10,15,10,0.98); border-top:1px solid rgba(74,222,128,0.1); display:flex; gap:0.25rem; backdrop-filter:blur(10px); }
+    .bottom-bar button { flex:1; padding:0.55rem 0.3rem; border-radius:1.5rem; font-weight:600; font-size:0.65rem; min-height:40px; }
     .btn-green { background:#22c55e; color:#052e16; }
     .btn-ghost { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+    
     .modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:100; padding:0.5rem; }
-    .modal-inner { background:#0d1f0d; border-radius:0.7rem; padding:0.8rem; width:100%; max-width:95vw; border:1px solid rgba(74,222,128,0.15); max-height:85vh; overflow-y:auto; }
-    .modal-close { float:right; background:none; border:none; color:#86efac; font-size:1.3rem; cursor:pointer; }
-    .modal-inner input, .modal-inner textarea { width:100%; padding:0.6rem; border-radius:0.5rem; margin-bottom:0.5rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.05); color:#86efac; font-size:0.85rem; }
+    .modal-inner { background:#0d1f0d; border-radius:0.8rem; padding:0.8rem; width:100%; max-width:95vw; border:1px solid rgba(74,222,128,0.15); max-height:85vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .modal-close { float:right; background:none; border:none; color:#86efac; font-size:1.5rem; cursor:pointer; padding:0.2rem; min-width:40px; min-height:40px; }
+    .modal-inner input, .modal-inner textarea { width:100%; padding:0.6rem; border-radius:0.5rem; margin-bottom:0.5rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; }
     .modal-inner textarea { min-height:100px; resize:vertical; }
     .modal-actions { display:flex; gap:0.4rem; margin-top:0.5rem; }
-    .modal-actions button { flex:1; padding:0.55rem; border-radius:1.5rem; font-weight:600; font-size:0.8rem; }
+    .modal-actions button { flex:1; padding:0.6rem; border-radius:1.5rem; font-weight:600; font-size:0.8rem; min-height:40px; }
     .btn-save { background:#22c55e; color:#052e16; }
     .btn-cancel { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+    
     .share-buttons { display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin:0.8rem 0; }
-    .share-btn { padding:0.7rem; border-radius:0.8rem; font-weight:600; font-size:0.8rem; text-align:center; cursor:pointer; border:none; color:white; }
+    .share-btn { padding:0.8rem 0.5rem; border-radius:0.8rem; font-weight:600; font-size:0.75rem; text-align:center; cursor:pointer; border:none; color:white; min-height:44px; display:flex; align-items:center; justify-content:center; gap:0.3rem; }
     .share-telegram { background:#0088cc; }
     .share-whatsapp { background:#25D366; }
     .share-facebook { background:#1877F2; }
     .share-twitter { background:#1DA1F2; }
     .share-email { background:#ea580c; grid-column:1/-1; }
+    
     .preview-img, .preview-video { width:100%; border-radius:0.4rem; max-height:70vh; object-fit:contain; }
     iframe { width:100%; height:70vh; border:none; border-radius:0.4rem; }
     a { color:#4ade80; }
-    .nav-link { color:#60a5fa; text-decoration:none; font-size:0.75rem; }
+    .nav-link { color:#60a5fa; text-decoration:none; font-size:0.7rem; }
+    
+    @media (min-width:768px) {
+      .gallery-card { flex:0 0 280px; }
+      .file-list { max-width:800px; margin:0 auto; }
+      .dash-content { max-width:800px; margin:0 auto; }
+    }
   </style>
 </head>
 <body>
@@ -87,18 +103,18 @@
     <h1>🔐 File Manager</h1>
     <input type="password" id="pw" placeholder="Password" autocomplete="off" />
     <button onclick="unlock()">Unlock</button>
-    <div class="error" id="err" style="color:#fca5a5;font-size:0.8rem;margin-top:0.5rem;"></div>
+    <div id="err" style="color:#fca5a5;font-size:0.8rem;margin-top:0.5rem;"></div>
   </div>
 </div>
 
 <div id="home" class="home-page hidden">
-  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button><br><a href="ai.html" class="nav-link" style="margin-top:1rem;display:inline-block;">🤖 AI Guide →</a></div></div>
-  <div class="gallery-section"><h2 style="font-size:1.1rem;margin-bottom:0.8rem;">✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
+  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button><br><a href="ai.html" class="nav-link" style="margin-top:0.8rem;display:inline-block;">🤖 AI Guide →</a></div></div>
+  <div class="gallery-section"><h2 style="font-size:1rem;margin-bottom:0.8rem;">✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
   <button class="fab" onclick="openDash()">📁</button>
 </div>
 
 <div id="dash" class="dashboard hidden">
-  <div class="dash-header"><h1>📁 Files</h1><div><a href="ai.html" class="nav-link">🤖 AI Guide</a><button class="btn-ghost" style="padding:0.3rem 0.7rem;font-size:0.75rem;margin-left:0.5rem;" onclick="goHome()">← Home</button></div></div>
+  <div class="dash-header"><h1>📁 Files</h1><div><a href="ai.html" class="nav-link">🤖 AI</a><button class="btn-ghost" style="padding:0.3rem 0.6rem;font-size:0.7rem;margin-left:0.4rem;" onclick="goHome()">←</button></div></div>
   <div class="dash-content">
     <label class="upload-zone" for="fileInput">📤 Upload to <strong id="currentFolderLabel">Root</strong></label>
     <input type="file" id="fileInput" multiple accept="*/*" />
@@ -148,64 +164,27 @@
 </div></div>
 
 <script>
-const PASS = 'stor-demo';
-const BIN_ID = '6a32a2f8f5f4af5e2901f250';
-const MASTER_KEY = '$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-const HEADERS = { 'X-Master-Key': MASTER_KEY, 'Content-Type': 'application/json' };
-const UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload';
-const PRESET = 'stor_upload';
-let files = [], currentFolder = '', shareFile = { url: '', name: '' };
-
-function $(id) { return document.getElementById(id); }
-function show(id) { $(id).classList.remove('hidden'); }
-function hide(id) { $(id).classList.add('hidden'); }
-function fs(b) { if(!b)return''; if(b<1024)return b+' B'; if(b<1048576)return(b/1024).toFixed(1)+' KB'; return(b/1048576).toFixed(1)+' MB'; }
-function fd(d) { if(!d)return''; return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
-function icon(f) { if(f.type==='folder')return'📁'; const i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'}; return i[(f.format||'').toLowerCase()]||'📄'; }
-function isImg(f) { return['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()); }
-
-async function loadFiles() { try { const r=await fetch(`${BIN_URL}/latest`,{headers:HEADERS}); files=(await r.json()).record?.files||[]; } catch(e) { files=[]; } }
-async function saveFiles() { await fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify({files})}); }
-
-function unlock() { if($('pw').value===PASS) { hide('lockScreen'); show('home'); refresh(); } else $('err').textContent='Wrong password'; }
-function lock() { hide('home'); hide('dash'); show('lockScreen'); $('pw').value=''; }
+const PASS='stor-demo',BIN_ID='6a32a2f8f5f4af5e2901f250',MASTER_KEY='$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
+const BIN_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`,HEADERS={'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'};
+const UPLOAD_URL='https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload',PRESET='stor_upload';
+let files=[],currentFolder='',shareFile={url:'',name:''};
+function $(id){return document.getElementById(id);}
+function show(id){$(id).classList.remove('hidden');}
+function hide(id){$(id).classList.add('hidden');}
+function fs(b){if(!b)return'';if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
+function fd(d){if(!d)return'';return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function icon(f){if(f.type==='folder')return'📁';const i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'};return i[(f.format||'').toLowerCase()]||'📄';}
+function isImg(f){return['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase());}
+async function loadFiles(){try{const r=await fetch(`${BIN_URL}/latest`,{headers:HEADERS});files=(await r.json()).record?.files||[];}catch(e){files=[];}}
+async function saveFiles(){await fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify({files})});}
+function unlock(){if($('pw').value===PASS){hide('lockScreen');show('home');refresh();}else $('err').textContent='Wrong password';}
+function lock(){hide('home');hide('dash');show('lockScreen');$('pw').value='';}
 $('pw').addEventListener('keyup',e=>{if(e.key==='Enter')unlock();});
-
-async function refresh() { await loadFiles(); renderGallery(); renderBreadcrumb(); renderList(); $('currentFolderLabel').textContent=currentFolder||'Root'; }
-
-function renderBreadcrumb() {
-  const el=$('breadcrumb'); let html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';
-  if(currentFolder) { const p=currentFolder.split('/'); let path=''; p.forEach((x,i)=>{ path+=(i>0?'/':'')+x; html+=` <span>›</span> <span onclick="currentFolder='${path}';refresh();">📁 ${x}</span>`; }); }
-  el.innerHTML=html;
-}
-function renderGallery() {
-  const imgs=files.filter(f=>isImg(f));
-  $('gallery').innerHTML=imgs.length?imgs.slice(0,12).map(f=>`<div class="gallery-card" onclick="openDash()"><img src="${f.url}" loading="lazy" /><div class="info"><span>${f.name}</span><span>${fs(f.bytes)}</span></div></div>`).join(''):'<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;">No images yet</p>';
-}
-function renderList() {
-  const search=($('searchInput')?.value||'').toLowerCase(), folders=new Set(), fl=[];
-  files.forEach(f=>{
-    const inF=currentFolder?(f.folder||'').startsWith(currentFolder):true; if(!inF)return;
-    const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');
-    if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){const fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];if(!currentFolder||!rem.includes('/'))folders.add(fp);if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}}
-    else if(!f.type||f.type!=='folder'){if(!rem||!rem.includes('/'))fl.push(f);}
-  });
-  files.forEach(f=>{if(!f.type||f.type!=='folder'){const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.includes('/'))folders.add(rem.split('/')[0]);}});
-  folders.forEach(fn=>{if(!fl.find(x=>x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn)){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});
-  let dl=search?fl.filter(f=>f.name.toLowerCase().includes(search)||(f.folder||'').toLowerCase().includes(search)):fl;
-  $('list').innerHTML=dl.length?dl.map(f=>{
-    const idx=files.findIndex(x=>x.public_id===f.public_id&&x.name===f.name);
-    return `<div class="file-row" onclick="${f.type==='folder'?`currentFolder='${f.folder||f.name.replace('/','')}';refresh();`:`preview(${idx})`}">
-      <div class="file-thumb">${f.type==='folder'?'📁':isImg(f)?`<img src="${f.url}" loading="lazy" />`:icon(f)}</div>
-      <div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${f.type==='folder'?'Folder':fs(f.bytes)}${f.date?' · '+fd(f.date):''}</div></div>
-      <div class="file-btns" onclick="event.stopPropagation()">
-        ${f.url&&f.type!=='folder'?`<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button><button class="share" onclick="openShare('${f.url}','${f.name}')">🔗</button>`:''}
-        ${idx>=0?`<button class="del" onclick="delFile(${idx})">🗑</button>`:''}
-      </div></div>`;
-  }).join(''):'<div class="empty-state"><span>📂</span>No files</div>';
-}
-function preview(i){const f=files[i];if(!f)return;const c=$('previewContent');if(isImg(f))c.innerHTML=`<img src="${f.url}" class="preview-img" /><p style="text-align:center;margin-top:0.5rem;">${f.name} · ${fs(f.bytes)} · ${fd(f.date)}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(['mp4','mov','webm'].includes(f.format))c.innerHTML=`<video src="${f.url}" controls class="preview-video" playsinline></video><p style="text-align:center;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(f.format==='pdf')c.innerHTML=`<iframe src="${f.url}"></iframe><p style="text-align:center;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else c.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open</a><br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;show('previewModal');}
+async function refresh(){await loadFiles();renderGallery();renderBreadcrumb();renderList();if($('currentFolderLabel'))$('currentFolderLabel').textContent=currentFolder||'Root';}
+function renderBreadcrumb(){const el=$('breadcrumb');let html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';if(currentFolder){const p=currentFolder.split('/');let path='';p.forEach((x,i)=>{path+=(i>0?'/':'')+x;html+=` <span>›</span> <span onclick="currentFolder=\'${path}\';refresh();">📁 ${x}</span>`;});}el.innerHTML=html;}
+function renderGallery(){const imgs=files.filter(f=>isImg(f));$('gallery').innerHTML=imgs.length?imgs.slice(0,12).map(f=>`<div class="gallery-card" onclick="openDash()"><img src="${f.url}" loading="lazy" alt="${f.name}" /><div class="info"><span>${f.name}</span><span>${fs(f.bytes)}</span></div></div>`).join(''):'<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;padding:1rem;">No images yet</p>';}
+function renderList(){const search=($('searchInput')?.value||'').toLowerCase(),folders=new Set(),fl=[];files.forEach(f=>{const inF=currentFolder?(f.folder||'').startsWith(currentFolder):true;if(!inF)return;const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){const fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];if(!currentFolder||!rem.includes('/'))folders.add(fp);if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}}else if(!f.type||f.type!=='folder'){if(!rem||!rem.includes('/'))fl.push(f);}});files.forEach(f=>{if(!f.type||f.type!=='folder'){const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.includes('/'))folders.add(rem.split('/')[0]);}});folders.forEach(fn=>{if(!fl.find(x=>x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn)){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});let dl=search?fl.filter(f=>f.name.toLowerCase().includes(search)||(f.folder||'').toLowerCase().includes(search)):fl;$('list').innerHTML=dl.length?dl.map(f=>{const idx=files.findIndex(x=>x.public_id===f.public_id&&x.name===f.name);return`<div class="file-row" onclick="${f.type==='folder'?`currentFolder='${f.folder||f.name.replace('/','')}';refresh();`:`preview(${idx})`}"><div class="file-thumb">${f.type==='folder'?'📁':isImg(f)?`<img src="${f.url}" loading="lazy" />`:icon(f)}</div><div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${f.type==='folder'?'Folder':fs(f.bytes)}${f.date?' · '+fd(f.date):''}</div></div><div class="file-btns" onclick="event.stopPropagation()">${f.url&&f.type!=='folder'?`<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button><button class="share" onclick="openShare('${f.url}','${f.name}')">🔗</button>`:''}${idx>=0?`<button class="del" onclick="delFile(${idx})">🗑</button>`:''}</div></div>`;}).join(''):'<div class="empty-state"><span>📂</span>No files</div>';}
+function preview(i){const f=files[i];if(!f)return;const c=$('previewContent');if(isImg(f))c.innerHTML=`<img src="${f.url}" class="preview-img" /><p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">${f.name} · ${fs(f.bytes)}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(['mp4','mov','webm'].includes(f.format))c.innerHTML=`<video src="${f.url}" controls class="preview-video" playsinline></video><p style="text-align:center;font-size:0.8rem;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(f.format==='pdf')c.innerHTML=`<iframe src="${f.url}"></iframe><p style="text-align:center;font-size:0.8rem;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else c.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open</a><br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;show('previewModal');}
 async function delFile(i){if(!confirm('Delete?'))return;files.splice(i,1);await saveFiles();refresh();$('status').textContent='Deleted';$('status').className='status ok';}
 function copyUrl(u){navigator.clipboard.writeText(u).then(()=>{$('status').textContent='✅ Copied!';$('status').className='status ok';});}
 function openShare(url,name){shareFile={url,name};$('shareUrl').value=url;$('shareFileName').textContent='📄 '+name;show('shareModal');}
