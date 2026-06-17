@@ -14,7 +14,7 @@
       min-height: -webkit-fill-available; overflow-x: hidden;
     }
     html { height: -webkit-fill-available; }
-    input { -webkit-appearance: none; appearance: none; }
+    input, textarea { -webkit-appearance: none; appearance: none; outline: none; font-family: inherit; }
 
     /* LOCK SCREEN */
     .lock-screen {
@@ -22,25 +22,21 @@
       display: flex; align-items: center; justify-content: center;
       background: #0a0f0a; padding: 1.5rem;
     }
-    .lock-box {
-      width: 100%; max-width: 340px; text-align: center;
-    }
+    .lock-box { width: 100%; max-width: 340px; text-align: center; }
     .lock-box .icon { font-size: 4rem; margin-bottom: 1rem; }
     .lock-box h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
     .lock-box p { font-size: 0.85rem; color: #4ade80; margin-bottom: 1.5rem; }
     .lock-box input {
       width: 100%; padding: 0.9rem 1.2rem; border-radius: 2rem;
       border: 1px solid rgba(74,222,128,0.3); background: rgba(34,197,94,0.05);
-      color: #86efac; font-size: 1rem; text-align: center; outline: none;
+      color: #86efac; font-size: 1rem; text-align: center;
     }
     .lock-box input:focus { border-color: #22c55e; }
     .lock-box .unlock-btn {
       width: 100%; padding: 0.9rem; margin-top: 0.8rem; border-radius: 2rem;
-      background: #22c55e; color: #052e16; border: none; font-weight: 700;
-      font-size: 1rem; cursor: pointer;
+      background: #22c55e; color: #052e16; border: none; font-weight: 700; font-size: 1rem; cursor: pointer;
     }
     .lock-box .error { color: #fca5a5; font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2rem; }
-    .lock-box .hint { font-size: 0.7rem; color: #4ade80; opacity: 0.6; margin-top: 0.8rem; }
 
     /* HOME */
     .home-page { min-height: 100vh; min-height: -webkit-fill-available; }
@@ -58,8 +54,7 @@
     .hero-content p { font-size: 0.9rem; color: #4ade80; margin-bottom: 1.2rem; }
     .hero-content .cta {
       display: inline-block; padding: 0.8rem 2rem; border-radius: 2rem;
-      background: #22c55e; color: #052e16; font-weight: 600; font-size: 1rem;
-      border: none; cursor: pointer; text-decoration: none;
+      background: #22c55e; color: #052e16; font-weight: 600; font-size: 1rem; border: none; cursor: pointer;
     }
     .gallery-section { padding: 1.5rem 0.8rem; }
     .gallery-section h2 { font-size: 1.2rem; margin-bottom: 1rem; }
@@ -101,15 +96,22 @@
     .dash-content { padding: 0.8rem; }
 
     .upload-zone {
-      display: block; padding: 1rem; margin-bottom: 0.8rem;
+      display: block; padding: 1rem; margin-bottom: 0.5rem;
       background: rgba(34,197,94,0.05); border: 2px dashed rgba(74,222,128,0.2);
-      border-radius: 0.8rem; text-align: center; font-size: 0.85rem;
-      cursor: pointer; color: #86efac;
+      border-radius: 0.8rem; text-align: center; font-size: 0.85rem; cursor: pointer; color: #86efac;
     }
     input[type="file"] { display: none; }
     .status { text-align: center; font-size: 0.8rem; padding: 0.3rem; min-height: 1.2rem; }
     .status.ok { color: #4ade80; }
     .status.err { color: #fca5a5; }
+
+    .quick-actions { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; }
+    .quick-actions button {
+      flex: 1; padding: 0.5rem; border-radius: 1.5rem; font-size: 0.75rem;
+      font-weight: 600; cursor: pointer; border: 1px solid rgba(74,222,128,0.2);
+      background: rgba(34,197,94,0.03); color: #86efac;
+    }
+    .quick-actions button:active { background: rgba(34,197,94,0.15); }
 
     .file-list { display: flex; flex-direction: column; gap: 0.4rem; }
     .file-row {
@@ -124,21 +126,16 @@
     }
     .file-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .file-info { flex: 1; min-width: 0; }
-    .file-name {
-      font-size: 0.8rem; font-weight: 500; white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
-    }
+    .file-name { font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .file-meta { font-size: 0.65rem; color: #4ade80; }
     .file-btns { display: flex; gap: 0.2rem; flex-shrink: 0; }
     .file-btns button {
       width: 28px; height: 28px; border-radius: 0.4rem;
       border: 1px solid rgba(74,222,128,0.15);
       background: rgba(34,197,94,0.03); color: #86efac;
-      font-size: 0.7rem; cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
+      font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
     .file-btns .del { color: #fca5a5; }
-
     .empty-state { text-align: center; padding: 3rem 1rem; color: #4ade80; opacity: 0.5; }
     .empty-state span { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
 
@@ -158,8 +155,7 @@
     /* MODAL */
     .modal {
       position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-      display: flex; align-items: center; justify-content: center; z-index: 100;
-      padding: 0.5rem;
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 0.5rem;
     }
     .modal-inner {
       background: #0d1f0d; border-radius: 0.8rem; padding: 0.8rem;
@@ -171,6 +167,17 @@
       font-size: 1.3rem; cursor: pointer; padding: 0.2rem;
     }
     .preview-img, .preview-video { width: 100%; border-radius: 0.4rem; max-height: 75vh; object-fit: contain; }
+    .modal-inner h3 { margin-bottom: 0.8rem; font-size: 1rem; }
+    .modal-inner input, .modal-inner textarea {
+      width: 100%; padding: 0.7rem; border-radius: 0.6rem; margin-bottom: 0.5rem;
+      border: 1px solid rgba(74,222,128,0.2); background: rgba(34,197,94,0.05);
+      color: #86efac; font-size: 0.85rem;
+    }
+    .modal-inner textarea { min-height: 150px; resize: vertical; }
+    .modal-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
+    .modal-actions button { flex: 1; padding: 0.6rem; border-radius: 1.5rem; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+    .btn-save { background: #22c55e; color: #052e16; border: none; }
+    .btn-cancel { background: transparent; border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
 
     button:active, .upload-zone:active, .gallery-card:active { opacity: 0.7; }
   </style>
@@ -186,7 +193,7 @@
       <input type="password" id="passwordInput" placeholder="Password" autocomplete="off" />
       <button class="unlock-btn" onclick="doUnlock()">Unlock</button>
       <div class="error" id="lockError"></div>
-      <div class="hint">🔑 Default: stor-demo</div>
+      <div style="font-size:0.7rem;color:#4ade80;opacity:0.5;margin-top:0.8rem;">Default: stor-demo</div>
     </div>
   </div>
 
@@ -214,20 +221,67 @@
       <button class="btn-back" onclick="goHome()">← Home</button>
     </div>
     <div class="dash-content">
-      <label class="upload-zone" for="fileInput">📤 Tap to Upload</label>
+      <label class="upload-zone" for="fileInput">📤 Tap to Upload Files</label>
       <input type="file" id="fileInput" multiple accept="*/*" />
+      
+      <div class="quick-actions">
+        <button onclick="openCreateFile()">📝 New File</button>
+        <button onclick="openCreateFolder()">📁 New Folder</button>
+      </div>
+      
       <div class="status" id="status"></div>
       <div class="file-list" id="fileList"></div>
     </div>
     <div class="bottom-bar">
       <button class="btn-ghost" onclick="goHome()">🏠</button>
-      <button class="btn-green" onclick="document.getElementById('fileInput').click()">📤 Upload</button>
+      <button class="btn-green" onclick="document.getElementById('fileInput').click()">📤</button>
+      <button class="btn-ghost" onclick="openCreateFile()">📝</button>
       <button class="btn-ghost" onclick="refreshAll()">🔄</button>
       <button class="btn-ghost" onclick="doLock()">🔒</button>
     </div>
   </div>
 
-  <!-- PREVIEW -->
+  <!-- CREATE FILE MODAL -->
+  <div id="createFileModal" class="modal" style="display:none;">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeCreateFile()">✕</button>
+      <h3>📝 Create New File</h3>
+      <input type="text" id="newFileName" placeholder="filename.txt" />
+      <textarea id="newFileContent" placeholder="Write your content here..."></textarea>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeCreateFile()">Cancel</button>
+        <button class="btn-save" onclick="createFile()">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE FOLDER MODAL -->
+  <div id="createFolderModal" class="modal" style="display:none;">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeCreateFolder()">✕</button>
+      <h3>📁 New Folder</h3>
+      <input type="text" id="newFolderName" placeholder="Folder name" />
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeCreateFolder()">Cancel</button>
+        <button class="btn-save" onclick="createFolder()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT FILE MODAL -->
+  <div id="editFileModal" class="modal" style="display:none;">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeEditFile()">✕</button>
+      <h3 id="editFileTitle">✏️ Edit File</h3>
+      <textarea id="editFileContent"></textarea>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeEditFile()">Cancel</button>
+        <button class="btn-save" onclick="saveEdit()">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW MODAL -->
   <div id="previewModal" class="modal" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
     <div class="modal-inner">
       <button class="modal-close" onclick="document.getElementById('previewModal').style.display='none'">✕</button>
@@ -240,11 +294,11 @@
     const STORAGE_KEY = 'my_files_list';
     const UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload';
     const UPLOAD_PRESET = 'stor_upload';
+    let editIndex = -1;
 
     // PASSWORD
     function doUnlock() {
-      const pw = document.getElementById('passwordInput').value;
-      if (pw === PASSWORD) {
+      if (document.getElementById('passwordInput').value === PASSWORD) {
         document.getElementById('lockScreen').style.display = 'none';
         document.getElementById('homePage').style.display = 'block';
         document.getElementById('lockError').textContent = '';
@@ -261,15 +315,10 @@
       document.getElementById('passwordInput').value = '';
       document.getElementById('lockError').textContent = '';
     }
-    document.getElementById('passwordInput').addEventListener('keyup', function(e) {
-      if (e.key === 'Enter') doUnlock();
-    });
+    document.getElementById('passwordInput').addEventListener('keyup', e => { if (e.key === 'Enter') doUnlock(); });
 
     // STORAGE
-    function getFiles() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-      catch(e) { return []; }
-    }
+    function getFiles() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { return []; } }
     function saveFiles(f) { localStorage.setItem(STORAGE_KEY, JSON.stringify(f)); }
 
     function fmtSize(b) {
@@ -303,34 +352,135 @@
       el.innerHTML = files.map((f,i) => `
         <div class="file-row">
           <div class="file-thumb" onclick="preview(${i})">${['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()) ? `<img src="${f.url}" loading="lazy" />` : icon(f.format)}</div>
-          <div class="file-info" onclick="preview(${i})"><div class="file-name">${f.name}</div><div class="file-meta">${fmtSize(f.bytes)} · ${f.format||'file'}</div></div>
+          <div class="file-info" onclick="preview(${i})"><div class="file-name">${f.name}</div><div class="file-meta">${fmtSize(f.bytes)} · ${f.format||'file'}${f.folder ? ' · 📁'+f.folder : ''}</div></div>
           <div class="file-btns">
-            <button onclick="copyUrl('${f.url}')">📋</button>
-            <button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button>
-            <button class="del" onclick="delFile(${i})">🗑</button>
+            <button onclick="copyUrl('${f.url}')" title="Copy">📋</button>
+            <button onclick="downloadFile('${f.url}','${f.name}')" title="Download">⬇️</button>
+            <button onclick="openEdit(${i})" title="Edit">✏️</button>
+            <button class="del" onclick="delFile(${i})" title="Delete">🗑</button>
           </div>
         </div>`).join('');
     }
 
+    // CREATE FILE
+    function openCreateFile() {
+      document.getElementById('newFileName').value = '';
+      document.getElementById('newFileContent').value = '';
+      document.getElementById('createFileModal').style.display = 'flex';
+      document.getElementById('newFileName').focus();
+    }
+    function closeCreateFile() { document.getElementById('createFileModal').style.display = 'none'; }
+    function createFile() {
+      const name = document.getElementById('newFileName').value.trim();
+      const content = document.getElementById('newFileContent').value;
+      if (!name) { alert('Enter a filename'); return; }
+      if (!name.includes('.')) { alert('Add extension like .txt'); return; }
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      
+      const files = getFiles();
+      files.unshift({
+        name: name,
+        url: url,
+        public_id: 'local_' + Date.now(),
+        format: name.split('.').pop().toLowerCase(),
+        bytes: new Blob([content]).size,
+        type: 'raw',
+        content: content,
+        date: new Date().toISOString(),
+        isLocal: true,
+      });
+      saveFiles(files);
+      closeCreateFile();
+      refreshAll();
+      
+      const status = document.getElementById('status');
+      status.textContent = '✅ File created!';
+      status.className = 'status ok';
+      setTimeout(() => { status.textContent = ''; status.className = 'status'; }, 2000);
+    }
+
+    // CREATE FOLDER
+    function openCreateFolder() { document.getElementById('newFolderName').value = ''; document.getElementById('createFolderModal').style.display = 'flex'; document.getElementById('newFolderName').focus(); }
+    function closeCreateFolder() { document.getElementById('createFolderModal').style.display = 'none'; }
+    function createFolder() {
+      const name = document.getElementById('newFolderName').value.trim();
+      if (!name) { alert('Enter folder name'); return; }
+      const files = getFiles();
+      files.unshift({
+        name: name + '/',
+        url: '',
+        public_id: 'folder_' + Date.now(),
+        format: 'folder',
+        bytes: 0,
+        type: 'folder',
+        folder: name,
+        date: new Date().toISOString(),
+        isLocal: true,
+      });
+      saveFiles(files);
+      closeCreateFolder();
+      refreshAll();
+    }
+
+    // EDIT FILE
+    function openEdit(i) {
+      const f = getFiles()[i];
+      if (!f) return;
+      editIndex = i;
+      document.getElementById('editFileTitle').textContent = '✏️ ' + f.name;
+      document.getElementById('editFileContent').value = f.content || '';
+      document.getElementById('editFileModal').style.display = 'flex';
+    }
+    function closeEditFile() { document.getElementById('editFileModal').style.display = 'none'; editIndex = -1; }
+    function saveEdit() {
+      if (editIndex < 0) return;
+      const files = getFiles();
+      const f = files[editIndex];
+      const content = document.getElementById('editFileContent').value;
+      const blob = new Blob([content], { type: 'text/plain' });
+      f.content = content;
+      f.url = URL.createObjectURL(blob);
+      f.bytes = blob.size;
+      f.date = new Date().toISOString();
+      saveFiles(files);
+      closeEditFile();
+      refreshAll();
+    }
+
+    // PREVIEW
     function preview(i) {
       const f = getFiles()[i]; if (!f) return;
       const c = document.getElementById('previewContent');
       const fmt = (f.format||'').toLowerCase();
-      if (['jpg','jpeg','png','gif','webp'].includes(fmt)) c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
-      else if (['mp4','mov','webm'].includes(fmt)) c.innerHTML = `<video src="${f.url}" controls class="preview-video"></video>`;
-      else if (['mp3','wav','ogg'].includes(fmt)) c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;"></audio></div>`;
-      else c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(fmt)}</p><p>${f.name}</p><a href="${f.url}" target="_blank" style="color:#4ade80;">Open</a></div>`;
+      
+      if (fmt === 'folder') {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">📁</p><p>${f.folder}</p></div>`;
+      } else if (f.content !== undefined && ['txt','md','json','html','css','js'].includes(fmt)) {
+        c.innerHTML = `<div style="padding:1rem;"><h3 style="margin-bottom:0.5rem;">📄 ${f.name}</h3><pre style="white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,0.3);padding:0.8rem;border-radius:0.5rem;max-height:60vh;overflow-y:auto;font-size:0.8rem;">${escapeHtml(f.content)}</pre></div>`;
+      } else if (['jpg','jpeg','png','gif','webp'].includes(fmt)) {
+        c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
+      } else if (['mp4','mov','webm'].includes(fmt)) {
+        c.innerHTML = `<video src="${f.url}" controls class="preview-video"></video>`;
+      } else if (['mp3','wav','ogg'].includes(fmt)) {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;"></audio></div>`;
+      } else {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(fmt)}</p><p>${f.name}</p><a href="${f.url}" target="_blank" style="color:#4ade80;">Open</a></div>`;
+      }
       document.getElementById('previewModal').style.display = 'flex';
     }
+
+    function escapeHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
     function delFile(i) {
       if (!confirm('Delete?')) return;
       const f = getFiles(); f.splice(i,1); saveFiles(f); refreshAll();
     }
-
     function copyUrl(u) { navigator.clipboard.writeText(u).then(()=>alert('✅ Copied')).catch(()=>prompt('Copy:',u)); }
     function downloadFile(u,n) { const a=document.createElement('a'); a.href=u; a.download=n; a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
 
+    // UPLOAD
     document.getElementById('fileInput').addEventListener('change', async function() {
       const files = this.files; if (!files.length) return;
       const status = document.getElementById('status');
@@ -361,7 +511,6 @@
       loadGallery();
     }
 
-    // Initial load
     loadGallery();
     loadList();
   </script>
