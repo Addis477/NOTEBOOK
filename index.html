@@ -9,7 +9,7 @@
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; min-height:-webkit-fill-available; overflow-x:hidden; }
     html { height:-webkit-fill-available; }
-    input,textarea,select { -webkit-appearance:none; outline:none; font-family:inherit; }
+    input,textarea { -webkit-appearance:none; outline:none; font-family:inherit; }
     button { cursor:pointer; border:none; }
     .hidden { display:none!important; }
     .lock-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
@@ -33,6 +33,7 @@
     .fab { position:fixed; bottom:1rem; right:1rem; z-index:50; width:50px; height:50px; border-radius:50%; background:#22c55e; color:#052e16; font-size:1.4rem; box-shadow:0 4px 20px rgba(34,197,94,0.5); display:flex; align-items:center; justify-content:center; }
     .dashboard { min-height:100vh; padding-bottom:5.5rem; }
     .dash-header { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0.9rem; border-bottom:1px solid rgba(74,222,128,0.1); position:sticky; top:0; background:#0a0f0a; z-index:10; }
+    .dash-header h1 { font-size:1rem; }
     .dash-content { padding:0.7rem; }
     .upload-zone { display:block; padding:1rem; margin-bottom:0.5rem; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:0.8rem; text-align:center; cursor:pointer; font-size:0.85rem; }
     input[type="file"] { display:none; }
@@ -76,7 +77,7 @@
     .preview-img, .preview-video { width:100%; border-radius:0.4rem; max-height:70vh; object-fit:contain; }
     iframe { width:100%; height:70vh; border:none; border-radius:0.4rem; }
     a { color:#4ade80; }
-    button:active { opacity:0.7; }
+    .nav-link { color:#60a5fa; text-decoration:none; font-size:0.75rem; }
   </style>
 </head>
 <body>
@@ -91,13 +92,13 @@
 </div>
 
 <div id="home" class="home-page hidden">
-  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button></div></div>
+  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button><br><a href="ai.html" class="nav-link" style="margin-top:1rem;display:inline-block;">🤖 AI Guide →</a></div></div>
   <div class="gallery-section"><h2 style="font-size:1.1rem;margin-bottom:0.8rem;">✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
   <button class="fab" onclick="openDash()">📁</button>
 </div>
 
 <div id="dash" class="dashboard hidden">
-  <div class="dash-header"><h1>📁 Files</h1><button class="btn-ghost" style="padding:0.3rem 0.7rem;font-size:0.75rem;" onclick="goHome()">← Home</button></div>
+  <div class="dash-header"><h1>📁 Files</h1><div><a href="ai.html" class="nav-link">🤖 AI Guide</a><button class="btn-ghost" style="padding:0.3rem 0.7rem;font-size:0.75rem;margin-left:0.5rem;" onclick="goHome()">← Home</button></div></div>
   <div class="dash-content">
     <label class="upload-zone" for="fileInput">📤 Upload to <strong id="currentFolderLabel">Root</strong></label>
     <input type="file" id="fileInput" multiple accept="*/*" />
@@ -117,28 +118,23 @@
 </div>
 
 <div id="createModal" class="modal hidden"><div class="modal-inner">
-  <button class="modal-close" onclick="hide('createModal')">✕</button>
-  <h3>📝 Create File</h3>
-  <input type="text" id="cfName" placeholder="filename.txt" />
-  <textarea id="cfContent" placeholder="Content..."></textarea>
+  <button class="modal-close" onclick="hide('createModal')">✕</button><h3>📝 Create File</h3>
+  <input type="text" id="cfName" placeholder="filename.txt" /><textarea id="cfContent" placeholder="Content..."></textarea>
   <div class="modal-actions"><button class="btn-cancel" onclick="hide('createModal')">Cancel</button><button class="btn-save" onclick="createFile()">💾 Save</button></div>
 </div></div>
 
 <div id="folderModal" class="modal hidden"><div class="modal-inner">
-  <button class="modal-close" onclick="hide('folderModal')">✕</button>
-  <h3>📁 Create Folder</h3>
+  <button class="modal-close" onclick="hide('folderModal')">✕</button><h3>📁 Create Folder</h3>
   <input type="text" id="fName" placeholder="Folder name" />
   <div class="modal-actions"><button class="btn-cancel" onclick="hide('folderModal')">Cancel</button><button class="btn-save" onclick="createFolder()">Create</button></div>
 </div></div>
 
 <div id="previewModal" class="modal hidden" onclick="if(event.target===this)hide('previewModal')"><div class="modal-inner">
-  <button class="modal-close" onclick="hide('previewModal')">✕</button>
-  <div id="previewContent"></div>
+  <button class="modal-close" onclick="hide('previewModal')">✕</button><div id="previewContent"></div>
 </div></div>
 
 <div id="shareModal" class="modal hidden"><div class="modal-inner" style="max-width:420px;">
-  <button class="modal-close" onclick="hide('shareModal')">✕</button>
-  <h3>🔗 Share File</h3>
+  <button class="modal-close" onclick="hide('shareModal')">✕</button><h3>🔗 Share File</h3>
   <p id="shareFileName" style="font-size:0.85rem;margin-bottom:0.5rem;"></p>
   <input type="text" id="shareUrl" readonly onclick="this.select()" />
   <div class="share-buttons">
@@ -159,17 +155,14 @@ const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const HEADERS = { 'X-Master-Key': MASTER_KEY, 'Content-Type': 'application/json' };
 const UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload';
 const PRESET = 'stor_upload';
-
-let files = [];
-let currentFolder = '';
-let shareFile = { url: '', name: '' };
+let files = [], currentFolder = '', shareFile = { url: '', name: '' };
 
 function $(id) { return document.getElementById(id); }
 function show(id) { $(id).classList.remove('hidden'); }
 function hide(id) { $(id).classList.add('hidden'); }
 function fs(b) { if(!b)return''; if(b<1024)return b+' B'; if(b<1048576)return(b/1024).toFixed(1)+' KB'; return(b/1048576).toFixed(1)+' MB'; }
-function fd(date) { if(!date) return ''; const d=new Date(date); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
-function icon(f) { if(f.type==='folder') return '📁'; const i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'}; return i[(f.format||'').toLowerCase()]||'📄'; }
+function fd(d) { if(!d)return''; return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function icon(f) { if(f.type==='folder')return'📁'; const i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'}; return i[(f.format||'').toLowerCase()]||'📄'; }
 function isImg(f) { return['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()); }
 
 async function loadFiles() { try { const r=await fetch(`${BIN_URL}/latest`,{headers:HEADERS}); files=(await r.json()).record?.files||[]; } catch(e) { files=[]; } }
@@ -182,138 +175,50 @@ $('pw').addEventListener('keyup',e=>{if(e.key==='Enter')unlock();});
 async function refresh() { await loadFiles(); renderGallery(); renderBreadcrumb(); renderList(); $('currentFolderLabel').textContent=currentFolder||'Root'; }
 
 function renderBreadcrumb() {
-  const el=$('breadcrumb');
-  let html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';
-  if(currentFolder) { const parts=currentFolder.split('/'); let path=''; parts.forEach((p,i)=>{ path+=(i>0?'/':'')+p; html+=` <span>›</span> <span onclick="currentFolder='${path}';refresh();">📁 ${p}</span>`; }); }
+  const el=$('breadcrumb'); let html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';
+  if(currentFolder) { const p=currentFolder.split('/'); let path=''; p.forEach((x,i)=>{ path+=(i>0?'/':'')+x; html+=` <span>›</span> <span onclick="currentFolder='${path}';refresh();">📁 ${x}</span>`; }); }
   el.innerHTML=html;
 }
-
 function renderGallery() {
   const imgs=files.filter(f=>isImg(f));
   $('gallery').innerHTML=imgs.length?imgs.slice(0,12).map(f=>`<div class="gallery-card" onclick="openDash()"><img src="${f.url}" loading="lazy" /><div class="info"><span>${f.name}</span><span>${fs(f.bytes)}</span></div></div>`).join(''):'<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;">No images yet</p>';
 }
-
 function renderList() {
-  const search = ($('searchInput')?.value||'').toLowerCase();
-  const folders=new Set(), fileList=[];
+  const search=($('searchInput')?.value||'').toLowerCase(), folders=new Set(), fl=[];
   files.forEach(f=>{
-    const inFolder=currentFolder?(f.folder||'').startsWith(currentFolder):true;
-    if(!inFolder) return;
-    const remaining=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');
-    if(f.type==='folder'&&f.folder&&f.folder!==currentFolder) {
-      const fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];
-      if(!currentFolder||!remaining.includes('/')) folders.add(fp);
-      if(!currentFolder||remaining===f.folder.replace(currentFolder+'/','')) { if(remaining===''||remaining===f.folder) fileList.push(f); }
-    } else if(!f.type||f.type!=='folder') { if(!remaining||!remaining.includes('/')) fileList.push(f); }
+    const inF=currentFolder?(f.folder||'').startsWith(currentFolder):true; if(!inF)return;
+    const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');
+    if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){const fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];if(!currentFolder||!rem.includes('/'))folders.add(fp);if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}}
+    else if(!f.type||f.type!=='folder'){if(!rem||!rem.includes('/'))fl.push(f);}
   });
-  files.forEach(f=>{ if(!f.type||f.type!=='folder') { const remaining=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||''); if(remaining&&remaining.includes('/')) folders.add(remaining.split('/')[0]); } });
-  folders.forEach(fn=>{ if(!fileList.find(x=>x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn)) { fileList.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''}); } });
-  let displayList = search ? fileList.filter(f => f.name.toLowerCase().includes(search) || (f.folder||'').toLowerCase().includes(search)) : fileList;
-  $('list').innerHTML=displayList.length?displayList.map(f=>{
+  files.forEach(f=>{if(!f.type||f.type!=='folder'){const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.includes('/'))folders.add(rem.split('/')[0]);}});
+  folders.forEach(fn=>{if(!fl.find(x=>x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn)){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});
+  let dl=search?fl.filter(f=>f.name.toLowerCase().includes(search)||(f.folder||'').toLowerCase().includes(search)):fl;
+  $('list').innerHTML=dl.length?dl.map(f=>{
     const idx=files.findIndex(x=>x.public_id===f.public_id&&x.name===f.name);
     return `<div class="file-row" onclick="${f.type==='folder'?`currentFolder='${f.folder||f.name.replace('/','')}';refresh();`:`preview(${idx})`}">
       <div class="file-thumb">${f.type==='folder'?'📁':isImg(f)?`<img src="${f.url}" loading="lazy" />`:icon(f)}</div>
       <div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${f.type==='folder'?'Folder':fs(f.bytes)}${f.date?' · '+fd(f.date):''}</div></div>
       <div class="file-btns" onclick="event.stopPropagation()">
-        ${f.url&&f.type!=='folder'?`<button onclick="copyUrl('${f.url}')" title="Copy">📋</button><button onclick="downloadFile('${f.url}','${f.name}')" title="Download">⬇️</button><button class="share" onclick="openShare('${f.url}','${f.name}')" title="Share">🔗</button>`:''}
-        ${idx>=0?`<button class="del" onclick="delFile(${idx})" title="Delete">🗑</button>`:''}
+        ${f.url&&f.type!=='folder'?`<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button><button class="share" onclick="openShare('${f.url}','${f.name}')">🔗</button>`:''}
+        ${idx>=0?`<button class="del" onclick="delFile(${idx})">🗑</button>`:''}
       </div></div>`;
-  }).join(''):'<div class="empty-state"><span>📂</span>No files found</div>';
+  }).join(''):'<div class="empty-state"><span>📂</span>No files</div>';
 }
-
-function preview(i) {
-  const f=files[i]; if(!f) return;
-  const c=$('previewContent');
-  if(isImg(f)) c.innerHTML=`<img src="${f.url}" class="preview-img" /><p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">${f.name} · ${fs(f.bytes)} · ${fd(f.date)}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;
-  else if(['mp4','mov','webm'].includes(f.format)) c.innerHTML=`<video src="${f.url}" controls class="preview-video" playsinline></video><p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">${f.name} · ${fs(f.bytes)} · ${fd(f.date)}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;
-  else if(['mp3','wav','ogg'].includes(f.format)) c.innerHTML=`<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><p style="font-size:0.8rem;">${fs(f.bytes)} · ${fd(f.date)}</p><audio src="${f.url}" controls style="width:100%;margin-top:1rem;"></audio><button class="btn-save" style="margin-top:1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;
-  else if(f.format==='pdf') c.innerHTML=`<iframe src="${f.url}"></iframe><p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">${f.name} · ${fs(f.bytes)} · ${fd(f.date)}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;
-  else c.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><p style="font-size:0.8rem;">${fs(f.bytes)} · ${fd(f.date)}</p><a href="${f.url}" target="_blank">Open</a><br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;
-  show('previewModal');
-}
-
-async function delFile(i) { if(!confirm('Delete?'))return; files.splice(i,1); await saveFiles(); refresh(); $('status').textContent='Deleted'; $('status').className='status ok'; }
-function copyUrl(u) { navigator.clipboard.writeText(u).then(()=>{ $('status').textContent='✅ Copied!'; $('status').className='status ok'; }); }
-
-// SHARE FUNCTIONS
-function openShare(url, name) {
-  shareFile = { url, name };
-  $('shareUrl').value = url;
-  $('shareFileName').textContent = '📄 ' + name;
-  show('shareModal');
-}
-function copyShareUrl() {
-  navigator.clipboard.writeText(shareFile.url).then(() => {
-    $('status').textContent='✅ Link copied!'; $('status').className='status ok';
-  });
-}
-function shareTo(platform) {
-  const url = encodeURIComponent(shareFile.url);
-  const text = encodeURIComponent('Check out this file: ' + shareFile.name);
-  let shareUrl = '';
-  switch(platform) {
-    case 'telegram': shareUrl = `https://t.me/share/url?url=${url}&text=${text}`; break;
-    case 'whatsapp': shareUrl = `https://wa.me/?text=${text}%20${url}`; break;
-    case 'facebook': shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`; break;
-    case 'twitter': shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`; break;
-    case 'email': shareUrl = `mailto:?subject=${encodeURIComponent(shareFile.name)}&body=${encodeURIComponent('Here is the file: '+shareFile.url)}`; break;
-  }
-  window.open(shareUrl, '_blank');
-}
-
-// DOWNLOAD
-async function downloadFile(url, name) {
-  $('status').textContent='Downloading...'; $('status').className='status';
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = blobUrl; a.download = name;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(blobUrl);
-    $('status').textContent='✅ Downloaded!'; $('status').className='status ok';
-  } catch(e) { window.open(url, '_blank'); }
-}
-
-function openCreateFile() { $('cfName').value=''; $('cfContent').value=''; show('createModal'); }
-async function createFile() {
-  const name=$('cfName').value.trim(), content=$('cfContent').value;
-  if(!name) return alert('Enter filename');
-  $('status').textContent='Uploading...'; $('status').className='status';
-  const fd=new FormData(); fd.append('file',new Blob([content],{type:'text/plain'}),name); fd.append('upload_preset',PRESET);
-  if(currentFolder) fd.append('folder',currentFolder);
-  try {
-    const r=await fetch(UPLOAD_URL,{method:'POST',body:fd}); const d=await r.json();
-    if(d.secure_url) { files.unshift({name,url:d.secure_url,public_id:d.public_id,format:(d.format||name.split('.').pop()).toLowerCase(),bytes:d.bytes||0,folder:currentFolder,date:new Date().toISOString()}); await saveFiles(); hide('createModal'); refresh(); $('status').textContent='✅ Created!'; $('status').className='status ok'; }
-  } catch(e) { $('status').textContent='❌ Failed'; }
-}
-
-function openCreateFolder() { $('fName').value=''; show('folderModal'); }
-async function createFolder() {
-  const name=$('fName').value.trim(); if(!name) return alert('Enter name');
-  const fp=currentFolder?currentFolder+'/'+name:name;
-  files.unshift({name:name+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:fp,date:new Date().toISOString()});
-  await saveFiles(); hide('folderModal'); refresh(); $('status').textContent='📁 Created!'; $('status').className='status ok';
-}
-
-$('fileInput').addEventListener('change',async function(){
-  const fls=this.files; if(!fls.length) return;
-  $('status').textContent='Uploading...'; $('status').className='status';
-  let done=0;
-  for(let file of fls) {
-    const fd=new FormData(); fd.append('file',file); fd.append('upload_preset',PRESET);
-    if(currentFolder) fd.append('folder',currentFolder);
-    try { const r=await fetch(UPLOAD_URL,{method:'POST',body:fd}); const d=await r.json(); if(d.secure_url) { files.unshift({name:file.name,url:d.secure_url,public_id:d.public_id,format:(d.format||file.name.split('.').pop()).toLowerCase(),bytes:d.bytes||file.size,folder:currentFolder,date:new Date().toISOString()}); done++; } } catch(e) {}
-  }
-  await saveFiles(); refresh();
-  $('status').textContent=done?`✅ ${done} uploaded`:'❌ Failed'; $('status').className='status ok';
-  this.value='';
-});
-
-function openDash() { hide('home'); show('dash'); refresh(); }
-function goHome() { hide('dash'); show('home'); renderGallery(); }
-
+function preview(i){const f=files[i];if(!f)return;const c=$('previewContent');if(isImg(f))c.innerHTML=`<img src="${f.url}" class="preview-img" /><p style="text-align:center;margin-top:0.5rem;">${f.name} · ${fs(f.bytes)} · ${fd(f.date)}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(['mp4','mov','webm'].includes(f.format))c.innerHTML=`<video src="${f.url}" controls class="preview-video" playsinline></video><p style="text-align:center;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(f.format==='pdf')c.innerHTML=`<iframe src="${f.url}"></iframe><p style="text-align:center;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else c.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open</a><br><button class="btn-save" style="margin-top:0.5rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;show('previewModal');}
+async function delFile(i){if(!confirm('Delete?'))return;files.splice(i,1);await saveFiles();refresh();$('status').textContent='Deleted';$('status').className='status ok';}
+function copyUrl(u){navigator.clipboard.writeText(u).then(()=>{$('status').textContent='✅ Copied!';$('status').className='status ok';});}
+function openShare(url,name){shareFile={url,name};$('shareUrl').value=url;$('shareFileName').textContent='📄 '+name;show('shareModal');}
+function copyShareUrl(){navigator.clipboard.writeText(shareFile.url).then(()=>{$('status').textContent='✅ Link copied!';$('status').className='status ok';});}
+function shareTo(p){const u=encodeURIComponent(shareFile.url),t=encodeURIComponent('Check out: '+shareFile.name);let s='';switch(p){case'telegram':s=`https://t.me/share/url?url=${u}&text=${t}`;break;case'whatsapp':s=`https://wa.me/?text=${t}%20${u}`;break;case'facebook':s=`https://www.facebook.com/sharer/sharer.php?u=${u}`;break;case'twitter':s=`https://twitter.com/intent/tweet?url=${u}&text=${t}`;break;case'email':s=`mailto:?subject=${encodeURIComponent(shareFile.name)}&body=${encodeURIComponent('File: '+shareFile.url)}`;break;}window.open(s,'_blank');}
+async function downloadFile(url,name){$('status').textContent='Downloading...';try{const r=await fetch(url);const b=await r.blob();const bu=URL.createObjectURL(b);const a=document.createElement('a');a.href=bu;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(bu);$('status').textContent='✅ Downloaded!';}catch(e){window.open(url,'_blank');}$('status').className='status ok';}
+function openCreateFile(){$('cfName').value='';$('cfContent').value='';show('createModal');}
+async function createFile(){const n=$('cfName').value.trim(),c=$('cfContent').value;if(!n)return alert('Enter filename');$('status').textContent='Uploading...';const fd=new FormData();fd.append('file',new Blob([c],{type:'text/plain'}),n);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{const r=await fetch(UPLOAD_URL,{method:'POST',body:fd});const d=await r.json();if(d.secure_url){files.unshift({name:n,url:d.secure_url,public_id:d.public_id,format:(d.format||n.split('.').pop()).toLowerCase(),bytes:d.bytes||0,folder:currentFolder,date:new Date().toISOString()});await saveFiles();hide('createModal');refresh();$('status').textContent='✅ Created!';$('status').className='status ok';}}catch(e){$('status').textContent='❌ Failed';}}
+function openCreateFolder(){$('fName').value='';show('folderModal');}
+async function createFolder(){const n=$('fName').value.trim();if(!n)return alert('Enter name');const fp=currentFolder?currentFolder+'/'+n:n;files.unshift({name:n+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:fp,date:new Date().toISOString()});await saveFiles();hide('folderModal');refresh();$('status').textContent='📁 Created!';$('status').className='status ok';}
+$('fileInput').addEventListener('change',async function(){const fls=this.files;if(!fls.length)return;$('status').textContent='Uploading...';let done=0;for(let f of fls){const fd=new FormData();fd.append('file',f);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{const r=await fetch(UPLOAD_URL,{method:'POST',body:fd});const d=await r.json();if(d.secure_url){files.unshift({name:f.name,url:d.secure_url,public_id:d.public_id,format:(d.format||f.name.split('.').pop()).toLowerCase(),bytes:d.bytes||f.size,folder:currentFolder,date:new Date().toISOString()});done++;}}catch(e){}}await saveFiles();refresh();$('status').textContent=done?`✅ ${done} uploaded`:'❌ Failed';$('status').className='status ok';this.value='';});
+function openDash(){hide('home');show('dash');refresh();}
+function goHome(){hide('dash');show('home');renderGallery();}
 refresh();
 </script>
 </body>
