@@ -4,94 +4,106 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0a0f0a">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>File Manager</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; min-height:-webkit-fill-available; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
-    html { height:-webkit-fill-available; }
-    input,textarea { -webkit-appearance:none; appearance:none; outline:none; font-family:inherit; font-size:16px; }
-    button { cursor:pointer; border:none; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+    body { 
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; 
+      background:#0a0f0a; 
+      color:#86efac; 
+      height:100vh; 
+      overflow-x:hidden; 
+    }
+    html { height:100%; }
+    input,textarea { -webkit-appearance:none; outline:none; font-family:inherit; font-size:16px; }
+    button { cursor:pointer; border:none; }
     .hidden { display:none!important; }
     
-    .lock-screen { min-height:100vh; min-height:-webkit-fill-available; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+    .lock-screen { height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
     .lock-box { width:100%; max-width:340px; text-align:center; }
-    .lock-box h1 { font-size:clamp(1.5rem,5vw,1.8rem); margin-bottom:1.5rem; }
-    .lock-box input { width:100%; padding:0.9rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; text-align:center; }
-    .lock-box button { width:100%; padding:0.9rem; margin-top:0.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:700; font-size:1rem; }
+    .lock-box h1 { font-size:24px; margin-bottom:20px; }
+    .lock-box input { width:100%; padding:14px; border-radius:30px; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; text-align:center; }
+    .lock-box button { width:100%; padding:14px; margin-top:12px; border-radius:30px; background:#22c55e; color:#052e16; font-weight:700; font-size:16px; }
     
-    .home-page { min-height:100vh; min-height:-webkit-fill-available; }
-    .hero { position:relative; height:50vh; min-height:300px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .hero-bg { position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80') center/cover; filter:brightness(0.35); }
-    .hero-content { position:relative; text-align:center; padding:1rem; }
-    .hero-content h1 { font-size:clamp(1.5rem,6vw,1.8rem); }
-    .hero-content p { font-size:clamp(0.75rem,3vw,0.85rem); color:#4ade80; margin:0.5rem 0 1rem; }
-    .cta { display:inline-block; padding:0.7rem 1.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:600; font-size:0.95rem; text-decoration:none; }
-    .gallery-section { padding:1rem 0.8rem; }
-    .gallery-scroll { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; }
+    .home-page { min-height:100vh; }
+    .hero { position:relative; height:50vh; min-height:280px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .hero-bg { position:absolute; top:0; left:0; right:0; bottom:0; background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80') center/cover; filter:brightness(0.35); }
+    .hero-content { position:relative; text-align:center; padding:15px; z-index:1; }
+    .hero-content h1 { font-size:26px; }
+    .hero-content p { font-size:14px; color:#4ade80; margin:8px 0 15px; }
+    .cta { display:inline-block; padding:12px 28px; border-radius:30px; background:#22c55e; color:#052e16; font-weight:600; font-size:15px; text-decoration:none; }
+    .gallery-section { padding:15px 12px; }
+    .gallery-section h2 { font-size:16px; margin-bottom:12px; }
+    .gallery-scroll { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch; }
     .gallery-scroll::-webkit-scrollbar { display:none; }
-    .gallery-card { flex:0 0 75vw; max-width:280px; scroll-snap-align:start; border-radius:0.8rem; overflow:hidden; background:rgba(34,197,94,0.03); border:1px solid rgba(74,222,128,0.1); cursor:pointer; }
-    .gallery-card img { width:100%; height:180px; object-fit:cover; display:block; }
-    .gallery-card .info { padding:0.5rem 0.7rem; font-size:0.7rem; display:flex; justify-content:space-between; }
-    .fab { position:fixed; bottom:5rem; right:1rem; z-index:50; width:50px; height:50px; border-radius:50%; background:#22c55e; color:#052e16; font-size:1.4rem; box-shadow:0 4px 20px rgba(34,197,94,0.5); display:flex; align-items:center; justify-content:center; }
+    .gallery-card { flex:0 0 75vw; max-width:280px; border-radius:12px; overflow:hidden; background:rgba(34,197,94,0.03); border:1px solid rgba(74,222,128,0.1); }
+    .gallery-card img { width:100%; height:170px; object-fit:cover; display:block; }
+    .gallery-card .info { padding:8px 10px; font-size:11px; display:flex; justify-content:space-between; }
+    .fab { position:fixed; bottom:80px; right:15px; z-index:50; width:48px; height:48px; border-radius:50%; background:#22c55e; color:#052e16; font-size:22px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 15px rgba(0,0,0,0.4); }
     
-    .dashboard { min-height:100vh; min-height:-webkit-fill-available; padding-bottom:4.5rem; }
-    .dash-header { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0.9rem; border-bottom:1px solid rgba(74,222,128,0.1); position:sticky; top:0; background:#0a0f0a; z-index:10; backdrop-filter:blur(10px); }
-    .dash-header h1 { font-size:clamp(0.9rem,3vw,1rem); }
-    .dash-content { padding:0.7rem; }
-    .upload-zone { display:block; padding:1rem; margin-bottom:0.5rem; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:0.8rem; text-align:center; cursor:pointer; font-size:0.85rem; }
+    .dashboard { height:100vh; display:flex; flex-direction:column; }
+    .dash-header { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-bottom:1px solid rgba(74,222,128,0.1); flex-shrink:0; background:#0a0f0a; }
+    .dash-header h1 { font-size:16px; }
+    .dash-header .nav-row { display:flex; align-items:center; gap:8px; }
+    .dash-content { flex:1; overflow-y:auto; padding:10px; -webkit-overflow-scrolling:touch; }
+    
+    .upload-zone { display:block; padding:14px; margin-bottom:8px; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:12px; text-align:center; font-size:14px; }
     input[type="file"] { display:none; }
-    .status { text-align:center; font-size:0.75rem; padding:0.3rem; min-height:1.2rem; }
+    .status { text-align:center; font-size:12px; padding:4px; min-height:18px; }
     .status.ok { color:#4ade80; }
-    .search-box { width:100%; padding:0.6rem 1rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.03); color:#86efac; font-size:16px; margin-bottom:0.5rem; }
-    .breadcrumb { display:flex; gap:0.2rem; flex-wrap:wrap; margin-bottom:0.5rem; font-size:0.7rem; align-items:center; }
-    .breadcrumb span { color:#4ade80; cursor:pointer; padding:0.2rem 0; }
-    .file-list { display:flex; flex-direction:column; gap:0.3rem; }
-    .file-row { display:flex; align-items:center; gap:0.5rem; background:rgba(34,197,94,0.02); border:1px solid rgba(74,222,128,0.06); border-radius:0.6rem; padding:0.55rem 0.5rem; cursor:pointer; min-height:52px; }
+    
+    .search-box { width:100%; padding:10px 14px; border-radius:25px; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.03); color:#86efac; font-size:16px; margin-bottom:8px; }
+    .breadcrumb { display:flex; gap:3px; flex-wrap:wrap; margin-bottom:8px; font-size:12px; align-items:center; }
+    .breadcrumb span { color:#4ade80; }
+    
+    .file-list { display:flex; flex-direction:column; gap:4px; }
+    .file-row { display:flex; align-items:center; gap:8px; background:rgba(34,197,94,0.02); border:1px solid rgba(74,222,128,0.06); border-radius:10px; padding:10px 8px; min-height:50px; }
     .file-row:active { background:rgba(34,197,94,0.08); }
-    .file-thumb { width:40px; height:40px; border-radius:0.35rem; flex-shrink:0; background:#0a1a0a; display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
+    .file-thumb { width:38px; height:38px; border-radius:6px; flex-shrink:0; background:#0a1a0a; display:flex; align-items:center; justify-content:center; font-size:18px; overflow:hidden; }
     .file-thumb img { width:100%; height:100%; object-fit:cover; }
     .file-info { flex:1; min-width:0; }
-    .file-name { font-size:0.78rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .file-meta { font-size:0.6rem; color:#4ade80; }
-    .file-btns { display:flex; gap:0.2rem; flex-shrink:0; }
-    .file-btns button { width:30px; height:30px; border-radius:0.35rem; font-size:0.75rem; border:1px solid rgba(74,222,128,0.15); background:rgba(34,197,94,0.03); color:#86efac; display:flex; align-items:center; justify-content:center; min-width:30px; min-height:30px; }
+    .file-name { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .file-meta { font-size:10px; color:#4ade80; }
+    .file-btns { display:flex; gap:3px; flex-shrink:0; }
+    .file-btns button { width:30px; height:30px; border-radius:6px; font-size:13px; border:1px solid rgba(74,222,128,0.15); background:rgba(34,197,94,0.03); color:#86efac; display:flex; align-items:center; justify-content:center; }
     .file-btns .del { color:#fca5a5; }
     .file-btns .share { color:#60a5fa; }
-    .empty-state { text-align:center; padding:2.5rem 1rem; color:#4ade80; opacity:0.5; }
+    .empty-state { text-align:center; padding:40px 15px; color:#4ade80; opacity:0.5; }
+    .empty-state span { font-size:30px; display:block; margin-bottom:8px; }
     
-    .bottom-bar { position:fixed; bottom:0; left:0; right:0; padding:0.5rem 0.5rem; padding-bottom:max(0.5rem,env(safe-area-inset-bottom)); background:rgba(10,15,10,0.98); border-top:1px solid rgba(74,222,128,0.1); display:flex; gap:0.25rem; backdrop-filter:blur(10px); }
-    .bottom-bar button { flex:1; padding:0.55rem 0.3rem; border-radius:1.5rem; font-weight:600; font-size:0.65rem; min-height:40px; }
+    .bottom-bar { display:flex; gap:4px; padding:8px 8px; background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); flex-shrink:0; }
+    .bottom-bar button { flex:1; padding:10px 4px; border-radius:20px; font-weight:600; font-size:10px; min-height:38px; }
     .btn-green { background:#22c55e; color:#052e16; }
     .btn-ghost { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
     
-    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:100; padding:0.5rem; }
-    .modal-inner { background:#0d1f0d; border-radius:0.8rem; padding:0.8rem; width:100%; max-width:95vw; border:1px solid rgba(74,222,128,0.15); max-height:85vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-    .modal-close { float:right; background:none; border:none; color:#86efac; font-size:1.5rem; cursor:pointer; padding:0.2rem; min-width:40px; min-height:40px; }
-    .modal-inner input, .modal-inner textarea { width:100%; padding:0.6rem; border-radius:0.5rem; margin-bottom:0.5rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; }
-    .modal-inner textarea { min-height:100px; resize:vertical; }
-    .modal-actions { display:flex; gap:0.4rem; margin-top:0.5rem; }
-    .modal-actions button { flex:1; padding:0.6rem; border-radius:1.5rem; font-weight:600; font-size:0.8rem; min-height:40px; }
+    .modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:100; padding:8px; }
+    .modal-inner { background:#0d1f0d; border-radius:12px; padding:12px; width:100%; max-width:95vw; border:1px solid rgba(74,222,128,0.15); max-height:80vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .modal-close { float:right; background:none; border:none; color:#86efac; font-size:22px; cursor:pointer; padding:4px; }
+    .modal-inner h3 { font-size:15px; margin-bottom:10px; }
+    .modal-inner input, .modal-inner textarea { width:100%; padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; }
+    .modal-inner textarea { min-height:100px; }
+    .modal-actions { display:flex; gap:6px; margin-top:8px; }
+    .modal-actions button { flex:1; padding:10px; border-radius:20px; font-weight:600; font-size:13px; min-height:40px; }
     .btn-save { background:#22c55e; color:#052e16; }
     .btn-cancel { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
     
-    .share-buttons { display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin:0.8rem 0; }
-    .share-btn { padding:0.8rem 0.5rem; border-radius:0.8rem; font-weight:600; font-size:0.75rem; text-align:center; cursor:pointer; border:none; color:white; min-height:44px; display:flex; align-items:center; justify-content:center; gap:0.3rem; }
+    .share-buttons { margin:10px 0; }
+    .share-btn { display:block; width:100%; padding:12px; border-radius:10px; font-weight:600; font-size:13px; text-align:center; cursor:pointer; border:none; color:white; margin-bottom:6px; min-height:44px; }
     .share-telegram { background:#0088cc; }
     .share-whatsapp { background:#25D366; }
     .share-facebook { background:#1877F2; }
     .share-twitter { background:#1DA1F2; }
-    .share-email { background:#ea580c; grid-column:1/-1; }
+    .share-email { background:#ea580c; }
+    .share-copy { background:#22c55e; color:#052e16; }
     
-    .preview-img, .preview-video { width:100%; border-radius:0.4rem; max-height:70vh; object-fit:contain; }
-    iframe { width:100%; height:70vh; border:none; border-radius:0.4rem; }
+    .preview-img, .preview-video { width:100%; border-radius:6px; max-height:65vh; object-fit:contain; }
+    iframe { width:100%; height:65vh; border:none; border-radius:6px; }
     a { color:#4ade80; }
-    .nav-link { color:#60a5fa; text-decoration:none; font-size:0.7rem; }
+    .nav-link { color:#60a5fa; text-decoration:none; font-size:11px; }
     
     @media (min-width:768px) {
       .gallery-card { flex:0 0 280px; }
-      .file-list { max-width:800px; margin:0 auto; }
       .dash-content { max-width:800px; margin:0 auto; }
     }
   </style>
@@ -103,18 +115,18 @@
     <h1>🔐 File Manager</h1>
     <input type="password" id="pw" placeholder="Password" autocomplete="off" />
     <button onclick="unlock()">Unlock</button>
-    <div id="err" style="color:#fca5a5;font-size:0.8rem;margin-top:0.5rem;"></div>
+    <div id="err" class="error"></div>
   </div>
 </div>
 
 <div id="home" class="home-page hidden">
-  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button><br><a href="ai.html" class="nav-link" style="margin-top:0.8rem;display:inline-block;">🤖 AI Guide →</a></div></div>
-  <div class="gallery-section"><h2 style="font-size:1rem;margin-bottom:0.8rem;">✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
+  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore Files</button><br><a href="ai.html" class="nav-link" style="margin-top:12px;display:inline-block;">🤖 AI Guide →</a></div></div>
+  <div class="gallery-section"><h2>✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
   <button class="fab" onclick="openDash()">📁</button>
 </div>
 
 <div id="dash" class="dashboard hidden">
-  <div class="dash-header"><h1>📁 Files</h1><div><a href="ai.html" class="nav-link">🤖 AI</a><button class="btn-ghost" style="padding:0.3rem 0.6rem;font-size:0.7rem;margin-left:0.4rem;" onclick="goHome()">←</button></div></div>
+  <div class="dash-header"><h1>📁 Files</h1><div class="nav-row"><a href="ai.html" class="nav-link">🤖 AI</a><button class="btn-ghost" style="padding:5px 10px;font-size:11px;margin-left:6px;" onclick="goHome()">←</button></div></div>
   <div class="dash-content">
     <label class="upload-zone" for="fileInput">📤 Upload to <strong id="currentFolderLabel">Root</strong></label>
     <input type="file" id="fileInput" multiple accept="*/*" />
@@ -149,9 +161,9 @@
   <button class="modal-close" onclick="hide('previewModal')">✕</button><div id="previewContent"></div>
 </div></div>
 
-<div id="shareModal" class="modal hidden"><div class="modal-inner" style="max-width:420px;">
+<div id="shareModal" class="modal hidden"><div class="modal-inner" style="max-width:400px;">
   <button class="modal-close" onclick="hide('shareModal')">✕</button><h3>🔗 Share File</h3>
-  <p id="shareFileName" style="font-size:0.85rem;margin-bottom:0.5rem;"></p>
+  <p id="shareFileName" style="font-size:13px;margin-bottom:8px;"></p>
   <input type="text" id="shareUrl" readonly onclick="this.select()" />
   <div class="share-buttons">
     <button class="share-btn share-telegram" onclick="shareTo('telegram')">📱 Telegram</button>
@@ -159,43 +171,83 @@
     <button class="share-btn share-facebook" onclick="shareTo('facebook')">📘 Facebook</button>
     <button class="share-btn share-twitter" onclick="shareTo('twitter')">🐦 Twitter</button>
     <button class="share-btn share-email" onclick="shareTo('email')">📧 Email</button>
+    <button class="share-btn share-copy" onclick="copyShareUrl()">📋 Copy Link</button>
   </div>
-  <button class="btn-save" style="width:100%;margin-top:0.3rem;" onclick="copyShareUrl()">📋 Copy Link</button>
 </div></div>
 
 <script>
-const PASS='stor-demo',BIN_ID='6a32a2f8f5f4af5e2901f250',MASTER_KEY='$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
-const BIN_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`,HEADERS={'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'};
-const UPLOAD_URL='https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload',PRESET='stor_upload';
-let files=[],currentFolder='',shareFile={url:'',name:''};
+var PASS='stor-demo',BIN_ID='6a32a2f8f5f4af5e2901f250',MASTER_KEY='$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
+var BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID,HEADERS={'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'};
+var UPLOAD_URL='https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload',PRESET='stor_upload';
+var files=[],currentFolder='',shareFile={url:'',name:''};
+
 function $(id){return document.getElementById(id);}
 function show(id){$(id).classList.remove('hidden');}
 function hide(id){$(id).classList.add('hidden');}
 function fs(b){if(!b)return'';if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
 function fd(d){if(!d)return'';return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-function icon(f){if(f.type==='folder')return'📁';const i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'};return i[(f.format||'').toLowerCase()]||'📄';}
-function isImg(f){return['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase());}
-async function loadFiles(){try{const r=await fetch(`${BIN_URL}/latest`,{headers:HEADERS});files=(await r.json()).record?.files||[];}catch(e){files=[];}}
-async function saveFiles(){await fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify({files})});}
+function icon(f){if(f.type==='folder')return'📁';var i={jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',mp4:'🎬',mp3:'🎵',pdf:'📕',txt:'📄',zip:'📦'};return i[(f.format||'').toLowerCase()]||'📄';}
+function isImg(f){return['jpg','jpeg','png','gif','webp'].indexOf((f.format||'').toLowerCase())!==-1;}
+
+async function loadFiles(){try{var r=await fetch(BIN_URL+'/latest',{headers:HEADERS});files=(await r.json()).record.files||[];}catch(e){files=[];}}
+async function saveFiles(){await fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify({files:files})});}
+
 function unlock(){if($('pw').value===PASS){hide('lockScreen');show('home');refresh();}else $('err').textContent='Wrong password';}
 function lock(){hide('home');hide('dash');show('lockScreen');$('pw').value='';}
-$('pw').addEventListener('keyup',e=>{if(e.key==='Enter')unlock();});
+$('pw').addEventListener('keyup',function(e){if(e.key==='Enter')unlock();});
+
 async function refresh(){await loadFiles();renderGallery();renderBreadcrumb();renderList();if($('currentFolderLabel'))$('currentFolderLabel').textContent=currentFolder||'Root';}
-function renderBreadcrumb(){const el=$('breadcrumb');let html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';if(currentFolder){const p=currentFolder.split('/');let path='';p.forEach((x,i)=>{path+=(i>0?'/':'')+x;html+=` <span>›</span> <span onclick="currentFolder=\'${path}\';refresh();">📁 ${x}</span>`;});}el.innerHTML=html;}
-function renderGallery(){const imgs=files.filter(f=>isImg(f));$('gallery').innerHTML=imgs.length?imgs.slice(0,12).map(f=>`<div class="gallery-card" onclick="openDash()"><img src="${f.url}" loading="lazy" alt="${f.name}" /><div class="info"><span>${f.name}</span><span>${fs(f.bytes)}</span></div></div>`).join(''):'<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;padding:1rem;">No images yet</p>';}
-function renderList(){const search=($('searchInput')?.value||'').toLowerCase(),folders=new Set(),fl=[];files.forEach(f=>{const inF=currentFolder?(f.folder||'').startsWith(currentFolder):true;if(!inF)return;const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){const fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];if(!currentFolder||!rem.includes('/'))folders.add(fp);if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}}else if(!f.type||f.type!=='folder'){if(!rem||!rem.includes('/'))fl.push(f);}});files.forEach(f=>{if(!f.type||f.type!=='folder'){const rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.includes('/'))folders.add(rem.split('/')[0]);}});folders.forEach(fn=>{if(!fl.find(x=>x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn)){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});let dl=search?fl.filter(f=>f.name.toLowerCase().includes(search)||(f.folder||'').toLowerCase().includes(search)):fl;$('list').innerHTML=dl.length?dl.map(f=>{const idx=files.findIndex(x=>x.public_id===f.public_id&&x.name===f.name);return`<div class="file-row" onclick="${f.type==='folder'?`currentFolder='${f.folder||f.name.replace('/','')}';refresh();`:`preview(${idx})`}"><div class="file-thumb">${f.type==='folder'?'📁':isImg(f)?`<img src="${f.url}" loading="lazy" />`:icon(f)}</div><div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${f.type==='folder'?'Folder':fs(f.bytes)}${f.date?' · '+fd(f.date):''}</div></div><div class="file-btns" onclick="event.stopPropagation()">${f.url&&f.type!=='folder'?`<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button><button class="share" onclick="openShare('${f.url}','${f.name}')">🔗</button>`:''}${idx>=0?`<button class="del" onclick="delFile(${idx})">🗑</button>`:''}</div></div>`;}).join(''):'<div class="empty-state"><span>📂</span>No files</div>';}
-function preview(i){const f=files[i];if(!f)return;const c=$('previewContent');if(isImg(f))c.innerHTML=`<img src="${f.url}" class="preview-img" /><p style="text-align:center;margin-top:0.5rem;font-size:0.8rem;">${f.name} · ${fs(f.bytes)}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(['mp4','mov','webm'].includes(f.format))c.innerHTML=`<video src="${f.url}" controls class="preview-video" playsinline></video><p style="text-align:center;font-size:0.8rem;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else if(f.format==='pdf')c.innerHTML=`<iframe src="${f.url}"></iframe><p style="text-align:center;font-size:0.8rem;">${f.name}<br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></p>`;else c.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open</a><br><button class="btn-save" style="margin-top:0.5rem;padding:0.5rem 1rem;" onclick="openShare('${f.url}','${f.name}')">🔗 Share</button></div>`;show('previewModal');}
+
+function renderBreadcrumb(){
+  var el=$('breadcrumb'),html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';
+  if(currentFolder){var p=currentFolder.split('/'),path='';p.forEach(function(x,i){path+=(i>0?'/':'')+x;html+=' <span>›</span> <span onclick="currentFolder=\''+path+'\';refresh();">📁 '+x+'</span>';});}
+  el.innerHTML=html;
+}
+
+function renderGallery(){
+  var imgs=files.filter(function(f){return isImg(f);});
+  $('gallery').innerHTML=imgs.length?imgs.slice(0,12).map(function(f){return'<div class="gallery-card" onclick="openDash()"><img src="'+f.url+'" loading="lazy" alt="'+f.name+'" /><div class="info"><span>'+f.name+'</span><span>'+fs(f.bytes)+'</span></div></div>';}).join(''):'<p style="color:#4ade80;opacity:0.5;font-size:13px;padding:15px;">No images yet</p>';
+}
+
+function renderList(){
+  var search=($('searchInput')?$('searchInput').value:'').toLowerCase();
+  var folders={},fl=[];
+  files.forEach(function(f){
+    var inF=currentFolder?(f.folder||'').indexOf(currentFolder)===0:true;if(!inF)return;
+    var rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');
+    if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){
+      var fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];
+      if(!currentFolder||rem.indexOf('/')===-1)folders[fp]=true;
+      if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}
+    }else if(!f.type||f.type!=='folder'){if(!rem||rem.indexOf('/')===-1)fl.push(f);}
+  });
+  files.forEach(function(f){if(!f.type||f.type!=='folder'){var rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.indexOf('/')!==-1)folders[rem.split('/')[0]]=true;}});
+  Object.keys(folders).forEach(function(fn){if(!fl.find(function(x){return x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn;})){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});
+  var dl=search?fl.filter(function(f){return f.name.toLowerCase().indexOf(search)!==-1||(f.folder||'').toLowerCase().indexOf(search)!==-1;}):fl;
+  $('list').innerHTML=dl.length?dl.map(function(f){
+    var idx=files.findIndex(function(x){return x.public_id===f.public_id&&x.name===f.name;});
+    return'<div class="file-row" onclick="'+(f.type==='folder'?"currentFolder='"+(f.folder||f.name.replace('/',''))+"';refresh();":"preview("+idx+")")+'"><div class="file-thumb">'+(f.type==='folder'?'📁':isImg(f)?'<img src="'+f.url+'" loading="lazy" />':icon(f))+'</div><div class="file-info"><div class="file-name">'+f.name+'</div><div class="file-meta">'+(f.type==='folder'?'Folder':fs(f.bytes))+(f.date?' · '+fd(f.date):'')+'</div></div><div class="file-btns" onclick="event.stopPropagation()">'+(f.url&&f.type!=='folder'?'<button onclick="copyUrl(\''+f.url+'\')">📋</button><button onclick="downloadFile(\''+f.url+'\',\''+f.name+'\')">⬇️</button><button class="share" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗</button>':'')+(idx>=0?'<button class="del" onclick="delFile('+idx+')">🗑</button>':'')+'</div></div>';
+  }).join(''):'<div class="empty-state"><span>📂</span>No files</div>';
+}
+
+function preview(i){var f=files[i];if(!f)return;var c=$('previewContent');if(isImg(f))c.innerHTML='<img src="'+f.url+'" class="preview-img" /><p style="text-align:center;margin-top:8px;font-size:13px;">'+f.name+' · '+fs(f.bytes)+'<br><button class="btn-save" style="margin-top:8px;padding:8px 16px;" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗 Share</button></p>';else if(['mp4','mov','webm'].indexOf(f.format)!==-1)c.innerHTML='<video src="'+f.url+'" controls class="preview-video" playsinline></video><p style="text-align:center;font-size:13px;">'+f.name+'<br><button class="btn-save" style="margin-top:8px;padding:8px 16px;" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗 Share</button></p>';else if(f.format==='pdf')c.innerHTML='<iframe src="'+f.url+'"></iframe><p style="text-align:center;font-size:13px;">'+f.name+'<br><button class="btn-save" style="margin-top:8px;padding:8px 16px;" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗 Share</button></p>';else c.innerHTML='<div style="text-align:center;padding:30px 15px;"><p style="font-size:40px;">'+icon(f)+'</p><p>'+f.name+'</p><a href="'+f.url+'" target="_blank">Open</a><br><button class="btn-save" style="margin-top:8px;padding:8px 16px;" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗 Share</button></div>';show('previewModal');}
+
 async function delFile(i){if(!confirm('Delete?'))return;files.splice(i,1);await saveFiles();refresh();$('status').textContent='Deleted';$('status').className='status ok';}
-function copyUrl(u){navigator.clipboard.writeText(u).then(()=>{$('status').textContent='✅ Copied!';$('status').className='status ok';});}
-function openShare(url,name){shareFile={url,name};$('shareUrl').value=url;$('shareFileName').textContent='📄 '+name;show('shareModal');}
-function copyShareUrl(){navigator.clipboard.writeText(shareFile.url).then(()=>{$('status').textContent='✅ Link copied!';$('status').className='status ok';});}
-function shareTo(p){const u=encodeURIComponent(shareFile.url),t=encodeURIComponent('Check out: '+shareFile.name);let s='';switch(p){case'telegram':s=`https://t.me/share/url?url=${u}&text=${t}`;break;case'whatsapp':s=`https://wa.me/?text=${t}%20${u}`;break;case'facebook':s=`https://www.facebook.com/sharer/sharer.php?u=${u}`;break;case'twitter':s=`https://twitter.com/intent/tweet?url=${u}&text=${t}`;break;case'email':s=`mailto:?subject=${encodeURIComponent(shareFile.name)}&body=${encodeURIComponent('File: '+shareFile.url)}`;break;}window.open(s,'_blank');}
-async function downloadFile(url,name){$('status').textContent='Downloading...';try{const r=await fetch(url);const b=await r.blob();const bu=URL.createObjectURL(b);const a=document.createElement('a');a.href=bu;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(bu);$('status').textContent='✅ Downloaded!';}catch(e){window.open(url,'_blank');}$('status').className='status ok';}
+function copyUrl(u){navigator.clipboard.writeText(u).then(function(){$('status').textContent='✅ Copied!';$('status').className='status ok';});}
+function openShare(url,name){shareFile={url:url,name:name};$('shareUrl').value=url;$('shareFileName').textContent='📄 '+name;show('shareModal');}
+function copyShareUrl(){navigator.clipboard.writeText(shareFile.url).then(function(){$('status').textContent='✅ Link copied!';$('status').className='status ok';});}
+function shareTo(p){var u=encodeURIComponent(shareFile.url),t=encodeURIComponent('Check out: '+shareFile.name),s='';switch(p){case'telegram':s='https://t.me/share/url?url='+u+'&text='+t;break;case'whatsapp':s='https://wa.me/?text='+t+'%20'+u;break;case'facebook':s='https://www.facebook.com/sharer/sharer.php?u='+u;break;case'twitter':s='https://twitter.com/intent/tweet?url='+u+'&text='+t;break;case'email':s='mailto:?subject='+encodeURIComponent(shareFile.name)+'&body='+encodeURIComponent('File: '+shareFile.url);break;}window.open(s,'_blank');}
+
+async function downloadFile(url,name){$('status').textContent='Downloading...';try{var r=await fetch(url);var b=await r.blob();var bu=URL.createObjectURL(b);var a=document.createElement('a');a.href=bu;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(bu);$('status').textContent='✅ Downloaded!';}catch(e){window.open(url,'_blank');}$('status').className='status ok';}
+
 function openCreateFile(){$('cfName').value='';$('cfContent').value='';show('createModal');}
-async function createFile(){const n=$('cfName').value.trim(),c=$('cfContent').value;if(!n)return alert('Enter filename');$('status').textContent='Uploading...';const fd=new FormData();fd.append('file',new Blob([c],{type:'text/plain'}),n);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{const r=await fetch(UPLOAD_URL,{method:'POST',body:fd});const d=await r.json();if(d.secure_url){files.unshift({name:n,url:d.secure_url,public_id:d.public_id,format:(d.format||n.split('.').pop()).toLowerCase(),bytes:d.bytes||0,folder:currentFolder,date:new Date().toISOString()});await saveFiles();hide('createModal');refresh();$('status').textContent='✅ Created!';$('status').className='status ok';}}catch(e){$('status').textContent='❌ Failed';}}
+async function createFile(){var n=$('cfName').value.trim(),c=$('cfContent').value;if(!n)return alert('Enter filename');$('status').textContent='Uploading...';var fd=new FormData();fd.append('file',new Blob([c],{type:'text/plain'}),n);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{var r=await fetch(UPLOAD_URL,{method:'POST',body:fd});var d=await r.json();if(d.secure_url){files.unshift({name:n,url:d.secure_url,public_id:d.public_id,format:(d.format||n.split('.').pop()).toLowerCase(),bytes:d.bytes||0,folder:currentFolder,date:new Date().toISOString()});await saveFiles();hide('createModal');refresh();$('status').textContent='✅ Created!';$('status').className='status ok';}}catch(e){$('status').textContent='❌ Failed';}}
+
 function openCreateFolder(){$('fName').value='';show('folderModal');}
-async function createFolder(){const n=$('fName').value.trim();if(!n)return alert('Enter name');const fp=currentFolder?currentFolder+'/'+n:n;files.unshift({name:n+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:fp,date:new Date().toISOString()});await saveFiles();hide('folderModal');refresh();$('status').textContent='📁 Created!';$('status').className='status ok';}
-$('fileInput').addEventListener('change',async function(){const fls=this.files;if(!fls.length)return;$('status').textContent='Uploading...';let done=0;for(let f of fls){const fd=new FormData();fd.append('file',f);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{const r=await fetch(UPLOAD_URL,{method:'POST',body:fd});const d=await r.json();if(d.secure_url){files.unshift({name:f.name,url:d.secure_url,public_id:d.public_id,format:(d.format||f.name.split('.').pop()).toLowerCase(),bytes:d.bytes||f.size,folder:currentFolder,date:new Date().toISOString()});done++;}}catch(e){}}await saveFiles();refresh();$('status').textContent=done?`✅ ${done} uploaded`:'❌ Failed';$('status').className='status ok';this.value='';});
+async function createFolder(){var n=$('fName').value.trim();if(!n)return alert('Enter name');var fp=currentFolder?currentFolder+'/'+n:n;files.unshift({name:n+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:fp,date:new Date().toISOString()});await saveFiles();hide('folderModal');refresh();$('status').textContent='📁 Created!';$('status').className='status ok';}
+
+$('fileInput').addEventListener('change',async function(){var fls=this.files;if(!fls.length)return;$('status').textContent='Uploading...';var done=0;for(var i=0;i<fls.length;i++){var f=fls[i];var fd=new FormData();fd.append('file',f);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{var r=await fetch(UPLOAD_URL,{method:'POST',body:fd});var d=await r.json();if(d.secure_url){files.unshift({name:f.name,url:d.secure_url,public_id:d.public_id,format:(d.format||f.name.split('.').pop()).toLowerCase(),bytes:d.bytes||f.size,folder:currentFolder,date:new Date().toISOString()});done++;}}catch(e){}}await saveFiles();refresh();$('status').textContent=done?'✅ '+done+' uploaded':'❌ Failed';$('status').className='status ok';this.value='';});
+
 function openDash(){hide('home');show('dash');refresh();}
 function goHome(){hide('dash');show('home');renderGallery();}
 refresh();
