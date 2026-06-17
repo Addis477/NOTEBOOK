@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>File Viewer</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { 
+      background:#0a0f0a; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      height:100vh; 
+      padding:15px; 
+      font-family:-apple-system,BlinkMacSystemFont,sans-serif; 
+    }
+    html { height:100%; }
+    img, video { max-width:100%; max-height:80vh; border-radius:10px; object-fit:contain; display:block; }
+    iframe { width:100%; height:80vh; border:none; border-radius:10px; }
+    .info { text-align:center; color:#86efac; padding:30px 15px; }
+    .info h2 { font-size:18px; margin-bottom:12px; }
+    a { color:#4ade80; display:inline-block; margin:5px; padding:10px 18px; background:#22c55e; color:#052e16; border-radius:25px; text-decoration:none; font-weight:600; font-size:14px; }
+    .back { background:transparent; border:1px solid rgba(74,222,128,0.3); color:#86efac; }
+    audio { width:100%; max-width:350px; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  <script>
+    var url = new URLSearchParams(window.location.search).get('url');
+    var name = new URLSearchParams(window.location.search).get('name') || 'File';
+    var el = document.getElementById('content');
+    
+    if (!url) {
+      el.innerHTML = '<div class="info"><h2>📂 No file specified</h2><p>Add ?url=FILE_URL to view</p></div>';
+    } else {
+      var ext = (url.split('.').pop()||'').toLowerCase();
+      if (['jpg','jpeg','png','gif','webp','svg'].indexOf(ext) !== -1) {
+        el.innerHTML = '<img src="'+url+'" alt="'+name+'" />';
+      } else if (['mp4','webm','mov'].indexOf(ext) !== -1) {
+        el.innerHTML = '<video src="'+url+'" controls playsinline style="max-width:100%;max-height:80vh;"></video>';
+      } else if (['mp3','wav','ogg','m4a'].indexOf(ext) !== -1) {
+        el.innerHTML = '<div class="info"><h2>🎵 '+name+'</h2><audio src="'+url+'" controls></audio><br><a href="'+url+'" download>⬇️ Download</a></div>';
+      } else if (ext === 'pdf') {
+        el.innerHTML = '<iframe src="'+url+'"></iframe>';
+      } else {
+        el.innerHTML = '<div class="info"><h2>📄 '+name+'</h2><p>Preview not available</p><a href="'+url+'" target="_blank">Open File</a><a href="'+url+'" download class="back">⬇️ Download</a></div>';
+      }
+    }
+  </script>
+</body>
+</html>
