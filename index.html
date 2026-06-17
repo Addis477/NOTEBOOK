@@ -8,13 +8,7 @@
   <title>File Manager</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    body { 
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; 
-      background:#0a0f0a; 
-      color:#86efac; 
-      height:100vh; 
-      overflow-x:hidden; 
-    }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; height:100vh; overflow-x:hidden; }
     html { height:100%; }
     input,textarea { -webkit-appearance:none; outline:none; font-family:inherit; font-size:16px; }
     button { cursor:pointer; border:none; }
@@ -25,6 +19,7 @@
     .lock-box h1 { font-size:24px; margin-bottom:20px; }
     .lock-box input { width:100%; padding:14px; border-radius:30px; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:16px; text-align:center; }
     .lock-box button { width:100%; padding:14px; margin-top:12px; border-radius:30px; background:#22c55e; color:#052e16; font-weight:700; font-size:16px; }
+    .lock-box .error { color:#fca5a5; font-size:13px; margin-top:8px; }
     
     .home-page { min-height:100vh; }
     .hero { position:relative; height:50vh; min-height:280px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
@@ -48,8 +43,8 @@
     .dash-header .nav-row { display:flex; align-items:center; gap:8px; }
     .dash-content { flex:1; overflow-y:auto; padding:10px; -webkit-overflow-scrolling:touch; }
     
-    .upload-zone { display:block; padding:14px; margin-bottom:8px; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:12px; text-align:center; font-size:14px; }
-    input[type="file"] { display:none; }
+    .upload-zone { display:block; padding:14px; margin-bottom:8px; background:rgba(34,197,94,0.03); border:2px dashed rgba(74,222,128,0.15); border-radius:12px; text-align:center; font-size:14px; cursor:pointer; }
+    input[type="file"] { position:absolute; opacity:0; width:1px; height:1px; }
     .status { text-align:center; font-size:12px; padding:4px; min-height:18px; }
     .status.ok { color:#4ade80; }
     
@@ -72,7 +67,7 @@
     .empty-state { text-align:center; padding:40px 15px; color:#4ade80; opacity:0.5; }
     .empty-state span { font-size:30px; display:block; margin-bottom:8px; }
     
-    .bottom-bar { display:flex; gap:4px; padding:8px 8px; background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); flex-shrink:0; }
+    .bottom-bar { display:flex; gap:4px; padding:8px; background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); flex-shrink:0; }
     .bottom-bar button { flex:1; padding:10px 4px; border-radius:20px; font-weight:600; font-size:10px; min-height:38px; }
     .btn-green { background:#22c55e; color:#052e16; }
     .btn-ghost { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
@@ -101,11 +96,6 @@
     iframe { width:100%; height:65vh; border:none; border-radius:6px; }
     a { color:#4ade80; }
     .nav-link { color:#60a5fa; text-decoration:none; font-size:11px; }
-    
-    @media (min-width:768px) {
-      .gallery-card { flex:0 0 280px; }
-      .dash-content { max-width:800px; margin:0 auto; }
-    }
   </style>
 </head>
 <body>
@@ -128,8 +118,8 @@
 <div id="dash" class="dashboard hidden">
   <div class="dash-header"><h1>📁 Files</h1><div class="nav-row"><a href="ai.html" class="nav-link">🤖 AI</a><button class="btn-ghost" style="padding:5px 10px;font-size:11px;margin-left:6px;" onclick="goHome()">←</button></div></div>
   <div class="dash-content">
-    <label class="upload-zone" for="fileInput">📤 Upload to <strong id="currentFolderLabel">Root</strong></label>
-    <input type="file" id="fileInput" multiple accept="*/*" />
+    <label class="upload-zone" for="fileInput" id="uploadZone">📤 Upload to <strong id="currentFolderLabel">Root</strong></label>
+    <input type="file" id="fileInput" multiple="multiple" accept="*/*" />
     <input type="text" class="search-box" id="searchInput" placeholder="🔍 Search files..." oninput="renderList()" />
     <div class="breadcrumb" id="breadcrumb"></div>
     <div class="status" id="status"></div>
@@ -137,7 +127,7 @@
   </div>
   <div class="bottom-bar">
     <button class="btn-ghost" onclick="goHome()">🏠</button>
-    <button class="btn-green" onclick="document.getElementById('fileInput').click()">📤</button>
+    <button class="btn-green" id="uploadBtn1">📤</button>
     <button class="btn-ghost" onclick="openCreateFile()">📝</button>
     <button class="btn-ghost" onclick="openCreateFolder()">📁</button>
     <button class="btn-ghost" onclick="refresh()">🔄</button>
@@ -157,7 +147,7 @@
   <div class="modal-actions"><button class="btn-cancel" onclick="hide('folderModal')">Cancel</button><button class="btn-save" onclick="createFolder()">Create</button></div>
 </div></div>
 
-<div id="previewModal" class="modal hidden" onclick="if(event.target===this)hide('previewModal')"><div class="modal-inner">
+<div id="previewModal" class="modal hidden"><div class="modal-inner">
   <button class="modal-close" onclick="hide('previewModal')">✕</button><div id="previewContent"></div>
 </div></div>
 
@@ -176,9 +166,16 @@
 </div></div>
 
 <script>
-var PASS='stor-demo',BIN_ID='6a32a2f8f5f4af5e2901f250',MASTER_KEY='$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
-var BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID,HEADERS={'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'};
-var UPLOAD_URL='https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload',PRESET='stor_upload';
+// iOS 14 Safari fix
+document.addEventListener('touchstart', function(){}, {passive: true});
+
+var PASS='Good7';
+var BIN_ID='6a32a2f8f5f4af5e2901f250';
+var MASTER_KEY='$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
+var BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
+var HEADERS={'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'};
+var UPLOAD_URL='https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload';
+var PRESET='stor_upload';
 var files=[],currentFolder='',shareFile={url:'',name:''};
 
 function $(id){return document.getElementById(id);}
@@ -200,7 +197,7 @@ async function refresh(){await loadFiles();renderGallery();renderBreadcrumb();re
 
 function renderBreadcrumb(){
   var el=$('breadcrumb'),html='<span onclick="currentFolder=\'\';refresh();">📂 Root</span>';
-  if(currentFolder){var p=currentFolder.split('/'),path='';p.forEach(function(x,i){path+=(i>0?'/':'')+x;html+=' <span>›</span> <span onclick="currentFolder=\''+path+'\';refresh();">📁 '+x+'</span>';});}
+  if(currentFolder){var p=currentFolder.split('/'),path='';for(var i=0;i<p.length;i++){path+=(i>0?'/':'')+p[i];html+=' <span>›</span> <span onclick="currentFolder=\''+path+'\';refresh();">📁 '+p[i]+'</span>';}}
   el.innerHTML=html;
 }
 
@@ -212,20 +209,31 @@ function renderGallery(){
 function renderList(){
   var search=($('searchInput')?$('searchInput').value:'').toLowerCase();
   var folders={},fl=[];
-  files.forEach(function(f){
-    var inF=currentFolder?(f.folder||'').indexOf(currentFolder)===0:true;if(!inF)return;
+  for(var i=0;i<files.length;i++){
+    var f=files[i];
+    var inF=currentFolder?(f.folder||'').indexOf(currentFolder)===0:true;if(!inF)continue;
     var rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');
     if(f.type==='folder'&&f.folder&&f.folder!==currentFolder){
       var fp=currentFolder?f.folder.replace(currentFolder+'/','').split('/')[0]:f.folder.split('/')[0];
       if(!currentFolder||rem.indexOf('/')===-1)folders[fp]=true;
       if(!currentFolder||rem===f.folder.replace(currentFolder+'/','')){if(rem===''||rem===f.folder)fl.push(f);}
     }else if(!f.type||f.type!=='folder'){if(!rem||rem.indexOf('/')===-1)fl.push(f);}
-  });
-  files.forEach(function(f){if(!f.type||f.type!=='folder'){var rem=currentFolder?(f.folder||'').replace(currentFolder+'/',''):(f.folder||'');if(rem&&rem.indexOf('/')!==-1)folders[rem.split('/')[0]]=true;}});
-  Object.keys(folders).forEach(function(fn){if(!fl.find(function(x){return x.name===fn+'/'||x.folder===(currentFolder?currentFolder+'/':'')+fn;})){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}});
+  }
+  for(var j=0;j<files.length;j++){
+    var f2=files[j];
+    if(!f2.type||f2.type!=='folder'){var rem2=currentFolder?(f2.folder||'').replace(currentFolder+'/',''):(f2.folder||'');if(rem2&&rem2.indexOf('/')!==-1)folders[rem2.split('/')[0]]=true;}
+  }
+  var folderKeys=Object.keys(folders);
+  for(var k=0;k<folderKeys.length;k++){
+    var fn=folderKeys[k];
+    var exists=false;
+    for(var m=0;m<fl.length;m++){if(fl[m].name===fn+'/'||fl[m].folder===(currentFolder?currentFolder+'/':'')+fn){exists=true;break;}}
+    if(!exists){fl.push({name:fn+'/',type:'folder',folder:currentFolder?currentFolder+'/'+fn:fn,bytes:0,format:'folder',url:'',date:''});}
+  }
   var dl=search?fl.filter(function(f){return f.name.toLowerCase().indexOf(search)!==-1||(f.folder||'').toLowerCase().indexOf(search)!==-1;}):fl;
   $('list').innerHTML=dl.length?dl.map(function(f){
-    var idx=files.findIndex(function(x){return x.public_id===f.public_id&&x.name===f.name;});
+    var idx=-1;
+    for(var n=0;n<files.length;n++){if(files[n].public_id===f.public_id&&files[n].name===f.name){idx=n;break;}}
     return'<div class="file-row" onclick="'+(f.type==='folder'?"currentFolder='"+(f.folder||f.name.replace('/',''))+"';refresh();":"preview("+idx+")")+'"><div class="file-thumb">'+(f.type==='folder'?'📁':isImg(f)?'<img src="'+f.url+'" loading="lazy" />':icon(f))+'</div><div class="file-info"><div class="file-name">'+f.name+'</div><div class="file-meta">'+(f.type==='folder'?'Folder':fs(f.bytes))+(f.date?' · '+fd(f.date):'')+'</div></div><div class="file-btns" onclick="event.stopPropagation()">'+(f.url&&f.type!=='folder'?'<button onclick="copyUrl(\''+f.url+'\')">📋</button><button onclick="downloadFile(\''+f.url+'\',\''+f.name+'\')">⬇️</button><button class="share" onclick="openShare(\''+f.url+'\',\''+f.name+'\')">🔗</button>':'')+(idx>=0?'<button class="del" onclick="delFile('+idx+')">🗑</button>':'')+'</div></div>';
   }).join(''):'<div class="empty-state"><span>📂</span>No files</div>';
 }
@@ -236,7 +244,7 @@ async function delFile(i){if(!confirm('Delete?'))return;files.splice(i,1);await 
 function copyUrl(u){navigator.clipboard.writeText(u).then(function(){$('status').textContent='✅ Copied!';$('status').className='status ok';});}
 function openShare(url,name){shareFile={url:url,name:name};$('shareUrl').value=url;$('shareFileName').textContent='📄 '+name;show('shareModal');}
 function copyShareUrl(){navigator.clipboard.writeText(shareFile.url).then(function(){$('status').textContent='✅ Link copied!';$('status').className='status ok';});}
-function shareTo(p){var u=encodeURIComponent(shareFile.url),t=encodeURIComponent('Check out: '+shareFile.name),s='';switch(p){case'telegram':s='https://t.me/share/url?url='+u+'&text='+t;break;case'whatsapp':s='https://wa.me/?text='+t+'%20'+u;break;case'facebook':s='https://www.facebook.com/sharer/sharer.php?u='+u;break;case'twitter':s='https://twitter.com/intent/tweet?url='+u+'&text='+t;break;case'email':s='mailto:?subject='+encodeURIComponent(shareFile.name)+'&body='+encodeURIComponent('File: '+shareFile.url);break;}window.open(s,'_blank');}
+function shareTo(p){var u=encodeURIComponent(shareFile.url),t=encodeURIComponent('Check out: '+shareFile.name),s='';if(p==='telegram')s='https://t.me/share/url?url='+u+'&text='+t;else if(p==='whatsapp')s='https://wa.me/?text='+t+'%20'+u;else if(p==='facebook')s='https://www.facebook.com/sharer/sharer.php?u='+u;else if(p==='twitter')s='https://twitter.com/intent/tweet?url='+u+'&text='+t;else if(p==='email')s='mailto:?subject='+encodeURIComponent(shareFile.name)+'&body='+encodeURIComponent('File: '+shareFile.url);window.open(s,'_blank');}
 
 async function downloadFile(url,name){$('status').textContent='Downloading...';try{var r=await fetch(url);var b=await r.blob();var bu=URL.createObjectURL(b);var a=document.createElement('a');a.href=bu;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(bu);$('status').textContent='✅ Downloaded!';}catch(e){window.open(url,'_blank');}$('status').className='status ok';}
 
@@ -246,7 +254,44 @@ async function createFile(){var n=$('cfName').value.trim(),c=$('cfContent').valu
 function openCreateFolder(){$('fName').value='';show('folderModal');}
 async function createFolder(){var n=$('fName').value.trim();if(!n)return alert('Enter name');var fp=currentFolder?currentFolder+'/'+n:n;files.unshift({name:n+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:fp,date:new Date().toISOString()});await saveFiles();hide('folderModal');refresh();$('status').textContent='📁 Created!';$('status').className='status ok';}
 
-$('fileInput').addEventListener('change',async function(){var fls=this.files;if(!fls.length)return;$('status').textContent='Uploading...';var done=0;for(var i=0;i<fls.length;i++){var f=fls[i];var fd=new FormData();fd.append('file',f);fd.append('upload_preset',PRESET);if(currentFolder)fd.append('folder',currentFolder);try{var r=await fetch(UPLOAD_URL,{method:'POST',body:fd});var d=await r.json();if(d.secure_url){files.unshift({name:f.name,url:d.secure_url,public_id:d.public_id,format:(d.format||f.name.split('.').pop()).toLowerCase(),bytes:d.bytes||f.size,folder:currentFolder,date:new Date().toISOString()});done++;}}catch(e){}}await saveFiles();refresh();$('status').textContent=done?'✅ '+done+' uploaded':'❌ Failed';$('status').className='status ok';this.value='';});
+// FIXED UPLOAD FOR iOS 14
+var fileInput=$('fileInput');
+var uploadZone=$('uploadZone');
+var uploadBtn1=$('uploadBtn1');
+
+function triggerUpload(e){e.preventDefault();fileInput.click();}
+if(uploadZone) uploadZone.addEventListener('click',triggerUpload);
+if(uploadBtn1) uploadBtn1.addEventListener('click',triggerUpload);
+
+fileInput.addEventListener('change',function(){
+  var fls=this.files;
+  if(!fls.length)return;
+  uploadFiles(fls);
+  this.value='';
+});
+
+async function uploadFiles(fls){
+  $('status').textContent='Uploading...';$('status').className='status';
+  var done=0;
+  for(var i=0;i<fls.length;i++){
+    var f=fls[i];
+    var fd=new FormData();
+    fd.append('file',f);
+    fd.append('upload_preset',PRESET);
+    if(currentFolder)fd.append('folder',currentFolder);
+    try{
+      var r=await fetch(UPLOAD_URL,{method:'POST',body:fd});
+      var d=await r.json();
+      if(d.secure_url){
+        files.unshift({name:f.name,url:d.secure_url,public_id:d.public_id,format:(d.format||f.name.split('.').pop()).toLowerCase(),bytes:d.bytes||f.size,folder:currentFolder,date:new Date().toISOString()});
+        done++;
+      }
+    }catch(e){}
+  }
+  await saveFiles();refresh();
+  $('status').textContent=done?'✅ '+done+' uploaded':'❌ Failed';
+  $('status').className=done?'status ok':'status err';
+}
 
 function openDash(){hide('home');show('dash');refresh();}
 function goHome(){hide('dash');show('home');renderGallery();}
