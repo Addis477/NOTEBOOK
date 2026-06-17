@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>AI Guide</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; display:flex; flex-direction:column; }
+    
+    .top-bar { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 1rem; background:#0a0f0a; border-bottom:1px solid rgba(74,222,128,0.1); }
+    .top-bar h1 { font-size:1.1rem; }
+    .top-bar a { color:#86efac; text-decoration:none; border:1px solid rgba(74,222,128,0.2); padding:0.4rem 0.8rem; border-radius:1.5rem; font-size:0.75rem; }
+    
+    .guide-info { padding:1rem; background:rgba(34,197,94,0.03); border-bottom:1px solid rgba(74,222,128,0.1); }
+    .guide-info p { font-size:0.75rem; color:#4ade80; line-height:1.4; }
+    .guide-info .tips { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem; }
+    .guide-info .tip { background:rgba(34,197,94,0.1); padding:0.3rem 0.6rem; border-radius:1rem; font-size:0.65rem; }
+    
+    iframe { flex:1; width:100%; border:none; min-height:70vh; }
+    
+    .bottom-bar { display:flex; gap:0.5rem; padding:0.6rem 1rem; background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); }
+    .bottom-bar a { flex:1; text-align:center; padding:0.6rem; border-radius:1.5rem; text-decoration:none; font-weight:600; font-size:0.75rem; }
+    .btn-files { background:#22c55e; color:#052e16; }
+    .btn-guide { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+    .btn-share { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <h1>🤖 AI Guide</h1>
+    <a href="index.html">📁 File Manager</a>
+  </div>
+
+  <!-- GUIDE INFO -->
+  <div class="guide-info">
+    <p><strong>🌍 Ethiopia Tour Guide AI</strong> — Ask anything about Ethiopia travel, culture, history, and destinations.</p>
+    <div class="tips">
+      <span class="tip">🏛️ Historical sites</span>
+      <span class="tip">🌄 Nature & parks</span>
+      <span class="tip">🍽️ Food & culture</span>
+      <span class="tip">🗣️ Languages</span>
+      <span class="tip">✈️ Travel tips</span>
+    </div>
+  </div>
+
+  <!-- EMBEDDED TOUR GUIDE -->
+  <iframe src="https://ethioian-ethiopia-tour-guide.hf.space" allow="camera;microphone;geolocation"></iframe>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <a href="index.html" class="btn-files">📁 Files</a>
+    <a href="#" class="btn-share" onclick="sharePage()">🔗 Share</a>
+    <a href="index.html" class="btn-guide">🏠 Home</a>
+  </div>
+
+  <script>
+    function sharePage() {
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: 'AI Guide - Ethiopia Tour', url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url).then(() => alert('Link copied!'));
+      }
+    }
+  </script>
+</body>
+</html>
