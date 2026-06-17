@@ -5,338 +5,267 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>Wallpapers</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f0a; color: #86efac; min-height: 100vh; min-height: -webkit-fill-available; overflow-x: hidden; }
-    html { height: -webkit-fill-available; }
-    input, textarea { -webkit-appearance: none; outline: none; font-family: inherit; }
-    button { cursor: pointer; border: none; }
-    .hidden { display: none !important; }
-
-    .lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0f0a; padding: 1.5rem; }
-    .lock-box { width: 100%; max-width: 340px; text-align: center; }
-    .lock-box .icon { font-size: 4rem; margin-bottom: 1rem; }
-    .lock-box h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .lock-box p { font-size: 0.85rem; color: #4ade80; margin-bottom: 1.5rem; }
-    .lock-box input { width: 100%; padding: 0.9rem; border-radius: 2rem; border: 1px solid rgba(74,222,128,0.3); background: rgba(34,197,94,0.05); color: #86efac; font-size: 1rem; text-align: center; }
-    .lock-box .unlock-btn { width: 100%; padding: 0.9rem; margin-top: 0.8rem; border-radius: 2rem; background: #22c55e; color: #052e16; font-weight: 700; font-size: 1rem; }
-    .lock-box .error { color: #fca5a5; font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2rem; }
-
-    .home-page { min-height: 100vh; }
-    .hero { position: relative; height: 55vh; min-height: 320px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80') center/cover; filter: brightness(0.35); }
-    .hero-content { position: relative; text-align: center; padding: 1rem; }
-    .hero-content h1 { font-size: 1.8rem; font-weight: 700; color: #86efac; margin-bottom: 0.5rem; }
-    .hero-content p { font-size: 0.85rem; color: #4ade80; margin-bottom: 1rem; }
-    .cta { display: inline-block; padding: 0.7rem 1.8rem; border-radius: 2rem; background: #22c55e; color: #052e16; font-weight: 600; font-size: 0.95rem; }
-    .gallery-section { padding: 1.2rem 0.8rem; }
-    .gallery-scroll { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; -webkit-overflow-scrolling: touch; }
-    .gallery-scroll::-webkit-scrollbar { display: none; }
-    .gallery-card { flex: 0 0 65vw; max-width: 280px; border-radius: 0.8rem; overflow: hidden; background: rgba(34,197,94,0.03); border: 1px solid rgba(74,222,128,0.1); }
-    .gallery-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
-    .gallery-card .info { padding: 0.5rem 0.7rem; font-size: 0.7rem; display: flex; justify-content: space-between; }
-    .fab { position: fixed; bottom: 1rem; right: 1rem; z-index: 50; width: 50px; height: 50px; border-radius: 50%; background: #22c55e; color: #052e16; font-size: 1.4rem; box-shadow: 0 4px 20px rgba(34,197,94,0.5); display: flex; align-items: center; justify-content: center; }
-
-    .dashboard { min-height: 100vh; padding-bottom: 5.5rem; }
-    .dash-header { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0.9rem; border-bottom: 1px solid rgba(74,222,128,0.1); position: sticky; top: 0; background: #0a0f0a; z-index: 10; }
-    .dash-header h1 { font-size: 1rem; font-weight: 600; }
-    .btn-back { background: none; border: 1px solid rgba(74,222,128,0.2); color: #86efac; padding: 0.3rem 0.7rem; border-radius: 1.5rem; font-size: 0.75rem; }
-    .dash-content { padding: 0.7rem; }
-    .quick-actions { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; }
-    .quick-actions button { flex: 1; padding: 0.55rem 0.3rem; border-radius: 1.5rem; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(74,222,128,0.2); background: rgba(34,197,94,0.03); color: #86efac; }
-    input[type="file"] { display: none; }
-    .status { text-align: center; font-size: 0.75rem; padding: 0.2rem; min-height: 1.2rem; }
-    .status.ok { color: #4ade80; }
-    .status.err { color: #fca5a5; }
-
-    .file-list { display: flex; flex-direction: column; gap: 0.3rem; }
-    .file-row { display: flex; align-items: center; gap: 0.5rem; background: rgba(34,197,94,0.02); border: 1px solid rgba(74,222,128,0.06); border-radius: 0.6rem; padding: 0.5rem; }
-    .file-thumb { width: 38px; height: 38px; border-radius: 0.35rem; flex-shrink: 0; background: #0a1a0a; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; overflow: hidden; }
-    .file-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .file-info { flex: 1; min-width: 0; }
-    .file-name { font-size: 0.78rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .file-meta { font-size: 0.62rem; color: #4ade80; }
-    .file-btns { display: flex; gap: 0.15rem; flex-shrink: 0; }
-    .file-btns button { width: 26px; height: 26px; border-radius: 0.35rem; font-size: 0.7rem; border: 1px solid rgba(74,222,128,0.15); background: rgba(34,197,94,0.03); color: #86efac; display: flex; align-items: center; justify-content: center; }
-    .file-btns .del { color: #fca5a5; }
-    .empty-state { text-align: center; padding: 2.5rem 1rem; color: #4ade80; opacity: 0.5; }
-    .empty-state span { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
-
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 0.5rem 0.7rem; padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); background: #0a0f0a; border-top: 1px solid rgba(74,222,128,0.1); display: flex; gap: 0.3rem; }
-    .bottom-bar button { flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.68rem; }
-    .btn-green { background: #22c55e; color: #052e16; }
-    .btn-ghost { background: transparent; border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
-
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 0.5rem; }
-    .modal-inner { background: #0d1f0d; border-radius: 0.7rem; padding: 0.8rem; width: 100%; max-width: 95vw; border: 1px solid rgba(74,222,128,0.15); max-height: 85vh; overflow-y: auto; }
-    .modal-close { float: right; background: none; border: none; color: #86efac; font-size: 1.3rem; cursor: pointer; padding: 0.15rem; }
-    .preview-img, .preview-video { width: 100%; border-radius: 0.4rem; max-height: 70vh; object-fit: contain; display: block; }
-    .modal-inner h3 { margin-bottom: 0.6rem; font-size: 0.95rem; }
-    .modal-inner input, .modal-inner textarea { width: 100%; padding: 0.6rem; border-radius: 0.5rem; margin-bottom: 0.4rem; border: 1px solid rgba(74,222,128,0.2); background: rgba(34,197,94,0.05); color: #86efac; font-size: 0.85rem; }
-    .modal-inner textarea { min-height: 120px; resize: vertical; }
-    .modal-actions { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
-    .modal-actions button { flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.8rem; }
-    .btn-save { background: #22c55e; color: #052e16; }
-    .btn-cancel { background: transparent; border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
-    iframe { width: 100%; height: 70vh; border: none; border-radius: 0.4rem; }
-    a { color: #4ade80; word-break: break-all; }
-    button:active { opacity: 0.7; }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0a0f0a; color:#86efac; min-height:100vh; min-height:-webkit-fill-available; overflow-x:hidden; }
+    html { height:-webkit-fill-available; }
+    input,textarea,select { -webkit-appearance:none; outline:none; font-family:inherit; }
+    button { cursor:pointer; border:none; }
+    .hidden { display:none!important; }
+    .lock-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#0a0f0a; padding:1.5rem; }
+    .lock-box { width:100%; max-width:340px; text-align:center; }
+    .lock-box .icon { font-size:4rem; margin-bottom:1rem; }
+    .lock-box h1 { font-size:1.8rem; font-weight:700; margin-bottom:0.3rem; }
+    .lock-box p { font-size:0.85rem; color:#4ade80; margin-bottom:1.5rem; }
+    .lock-box input { width:100%; padding:0.9rem; border-radius:2rem; border:1px solid rgba(74,222,128,0.3); background:rgba(34,197,94,0.05); color:#86efac; font-size:1rem; text-align:center; }
+    .lock-box .unlock-btn { width:100%; padding:0.9rem; margin-top:0.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:700; font-size:1rem; }
+    .lock-box .error { color:#fca5a5; font-size:0.8rem; margin-top:0.5rem; min-height:1.2rem; }
+    .home-page { min-height:100vh; }
+    .hero { position:relative; height:55vh; min-height:320px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80') center/cover; filter:brightness(0.35); }
+    .hero-content { position:relative; text-align:center; padding:1rem; }
+    .hero-content h1 { font-size:1.8rem; font-weight:700; color:#86efac; margin-bottom:0.5rem; }
+    .hero-content p { font-size:0.85rem; color:#4ade80; margin-bottom:1rem; }
+    .cta { display:inline-block; padding:0.7rem 1.8rem; border-radius:2rem; background:#22c55e; color:#052e16; font-weight:600; font-size:0.95rem; }
+    .gallery-section { padding:1.2rem 0.8rem; }
+    .gallery-scroll { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; -webkit-overflow-scrolling:touch; }
+    .gallery-scroll::-webkit-scrollbar { display:none; }
+    .gallery-card { flex:0 0 65vw; max-width:280px; border-radius:0.8rem; overflow:hidden; background:rgba(34,197,94,0.03); border:1px solid rgba(74,222,128,0.1); cursor:pointer; }
+    .gallery-card img { width:100%; height:180px; object-fit:cover; display:block; }
+    .gallery-card .info { padding:0.5rem 0.7rem; font-size:0.7rem; display:flex; justify-content:space-between; }
+    .fab { position:fixed; bottom:1rem; right:1rem; z-index:50; width:50px; height:50px; border-radius:50%; background:#22c55e; color:#052e16; font-size:1.4rem; box-shadow:0 4px 20px rgba(34,197,94,0.5); display:flex; align-items:center; justify-content:center; }
+    .dashboard { min-height:100vh; padding-bottom:5.5rem; }
+    .dash-header { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0.9rem; border-bottom:1px solid rgba(74,222,128,0.1); position:sticky; top:0; background:#0a0f0a; z-index:10; }
+    .dash-header h1 { font-size:1rem; font-weight:600; }
+    .btn-back { background:none; border:1px solid rgba(74,222,128,0.2); color:#86efac; padding:0.3rem 0.7rem; border-radius:1.5rem; font-size:0.75rem; }
+    .dash-content { padding:0.7rem; }
+    .quick-actions { display:flex; gap:0.4rem; margin-bottom:0.6rem; }
+    .quick-actions button { flex:1; padding:0.55rem 0.3rem; border-radius:1.5rem; font-size:0.75rem; font-weight:600; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.03); color:#86efac; }
+    input[type="file"] { display:none; }
+    .status { text-align:center; font-size:0.75rem; padding:0.2rem; min-height:1.2rem; }
+    .status.ok { color:#4ade80; }
+    .status.err { color:#fca5a5; }
+    .file-list { display:flex; flex-direction:column; gap:0.3rem; }
+    .file-row { display:flex; align-items:center; gap:0.5rem; background:rgba(34,197,94,0.02); border:1px solid rgba(74,222,128,0.06); border-radius:0.6rem; padding:0.5rem; cursor:pointer; }
+    .file-row:active { background:rgba(34,197,94,0.08); }
+    .file-thumb { width:38px; height:38px; border-radius:0.35rem; flex-shrink:0; background:#0a1a0a; display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
+    .file-thumb img { width:100%; height:100%; object-fit:cover; }
+    .file-info { flex:1; min-width:0; }
+    .file-name { font-size:0.78rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .file-meta { font-size:0.62rem; color:#4ade80; }
+    .file-btns { display:flex; gap:0.15rem; flex-shrink:0; }
+    .file-btns button { width:26px; height:26px; border-radius:0.35rem; font-size:0.7rem; border:1px solid rgba(74,222,128,0.15); background:rgba(34,197,94,0.03); color:#86efac; display:flex; align-items:center; justify-content:center; }
+    .file-btns button:active { background:rgba(34,197,94,0.2); }
+    .file-btns .del { color:#fca5a5; }
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:#4ade80; opacity:0.5; }
+    .empty-state span { font-size:2rem; display:block; margin-bottom:0.3rem; }
+    .bottom-bar { position:fixed; bottom:0; left:0; right:0; padding:0.5rem 0.7rem; padding-bottom:max(0.5rem,env(safe-area-inset-bottom)); background:#0a0f0a; border-top:1px solid rgba(74,222,128,0.1); display:flex; gap:0.3rem; }
+    .bottom-bar button { flex:1; padding:0.55rem; border-radius:1.5rem; font-weight:600; font-size:0.68rem; }
+    .btn-green { background:#22c55e; color:#052e16; }
+    .btn-ghost { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:100; padding:0.5rem; }
+    .modal-inner { background:#0d1f0d; border-radius:0.7rem; padding:0.8rem; width:100%; max-width:95vw; border:1px solid rgba(74,222,128,0.15); max-height:85vh; overflow-y:auto; }
+    .modal-close { float:right; background:none; border:none; color:#86efac; font-size:1.3rem; cursor:pointer; padding:0.15rem; }
+    .preview-img, .preview-video { width:100%; border-radius:0.4rem; max-height:70vh; object-fit:contain; display:block; }
+    .modal-inner h3 { margin-bottom:0.6rem; font-size:0.95rem; }
+    .modal-inner input, .modal-inner textarea, .modal-inner select { width:100%; padding:0.6rem; border-radius:0.5rem; margin-bottom:0.4rem; border:1px solid rgba(74,222,128,0.2); background:rgba(34,197,94,0.05); color:#86efac; font-size:0.85rem; }
+    .modal-inner textarea { min-height:120px; resize:vertical; }
+    .modal-actions { display:flex; gap:0.4rem; margin-top:0.4rem; }
+    .modal-actions button { flex:1; padding:0.55rem; border-radius:1.5rem; font-weight:600; font-size:0.8rem; }
+    .btn-save { background:#22c55e; color:#052e16; }
+    .btn-cancel { background:transparent; border:1px solid rgba(74,222,128,0.2); color:#86efac; }
+    iframe { width:100%; height:70vh; border:none; border-radius:0.4rem; }
+    a { color:#4ade80; word-break:break-all; }
+    button:active { opacity:0.7; }
   </style>
 </head>
 <body>
 
-  <div id="lockScreen" class="lock-screen">
-    <div class="lock-box">
-      <div class="icon">🔐</div><h1>Wallpapers</h1><p>Enter password</p>
-      <input type="password" id="passwordInput" placeholder="Password" autocomplete="off" />
-      <button class="unlock-btn" onclick="doUnlock()">Unlock</button>
-      <div class="error" id="lockError"></div>
-      <div style="font-size:0.65rem;color:#4ade80;opacity:0.5;margin-top:0.6rem;">Default: stor-demo</div>
-    </div>
+<div id="lockScreen" class="lock-screen">
+  <div class="lock-box">
+    <div class="icon">🔐</div><h1>Wallpapers</h1><p>Enter password</p>
+    <input type="password" id="pw" placeholder="Password" autocomplete="off" />
+    <button class="unlock-btn" onclick="unlock()">Unlock</button>
+    <div class="error" id="err"></div>
   </div>
+</div>
 
-  <div id="homePage" class="home-page hidden">
-    <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDashboard()">Explore</button></div></div>
-    <div class="gallery-section"><h2>✨ Recent</h2><div class="gallery-scroll" id="homeGallery"></div></div>
-    <button class="fab" onclick="openDashboard()">📁</button>
-  </div>
+<div id="home" class="home-page hidden">
+  <div class="hero"><div class="hero-bg"></div><div class="hero-content"><h1>Curated Wallpapers</h1><p>Beautiful images for your screen</p><button class="cta" onclick="openDash()">Explore</button></div></div>
+  <div class="gallery-section"><h2 style="font-size:1.1rem;margin-bottom:0.8rem;">✨ Recent</h2><div class="gallery-scroll" id="gallery"></div></div>
+  <button class="fab" onclick="openDash()">📁</button>
+</div>
 
-  <div id="dashboardPage" class="dashboard hidden">
-    <div class="dash-header"><h1>📁 My Files</h1><button class="btn-back" onclick="goHome()">← Home</button></div>
-    <div class="dash-content">
-      <div class="quick-actions">
-        <button onclick="document.getElementById('fileInput').click()">📤 Upload</button>
-        <button onclick="openCreateFile()">📝 Create File</button>
-        <button onclick="openCreateFolder()">📁 Create Folder</button>
-      </div>
-      <input type="file" id="fileInput" multiple accept="*/*" />
-      <div class="status" id="status"></div>
-      <div class="file-list" id="fileList"></div>
+<div id="dash" class="dashboard hidden">
+  <div class="dash-header"><h1>📁 My Files</h1><button class="btn-back" onclick="goHome()">← Home</button></div>
+  <div class="dash-content">
+    <div class="quick-actions">
+      <button onclick="$('fileInput').click()">📤 Upload</button>
+      <button onclick="openCreate()">📝 New File</button>
+      <button onclick="openFolder()">📁 New Folder</button>
     </div>
-    <div class="bottom-bar">
-      <button class="btn-ghost" onclick="goHome()">🏠</button>
-      <button class="btn-green" onclick="document.getElementById('fileInput').click()">📤</button>
-      <button class="btn-ghost" onclick="openCreateFile()">📝</button>
-      <button class="btn-ghost" onclick="openCreateFolder()">📁</button>
-      <button class="btn-ghost" onclick="refreshAll()">🔄</button>
-      <button class="btn-ghost" onclick="doLock()">🔒</button>
-    </div>
+    <input type="file" id="fileInput" multiple accept="*/*" />
+    <div class="status" id="status"></div>
+    <div class="file-list" id="list"></div>
   </div>
+  <div class="bottom-bar">
+    <button class="btn-ghost" onclick="goHome()">🏠</button>
+    <button class="btn-green" onclick="$('fileInput').click()">📤</button>
+    <button class="btn-ghost" onclick="openCreate()">📝</button>
+    <button class="btn-ghost" onclick="openFolder()">📁</button>
+    <button class="btn-ghost" onclick="loadAll()">🔄</button>
+    <button class="btn-ghost" onclick="lock()">🔒</button>
+  </div>
+</div>
 
-  <div id="createFileModal" class="modal hidden"><div class="modal-inner">
-    <button class="modal-close" onclick="closeModal('createFileModal')">✕</button>
-    <h3>📝 Create File</h3>
-    <input type="text" id="newFileName" placeholder="my-file.txt" />
-    <textarea id="newFileContent" placeholder="Content..."></textarea>
-    <select id="newFileFolder"><option value="">Root folder</option></select>
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('createFileModal')">Cancel</button><button class="btn-save" onclick="createFile()">💾 Save to Cloudinary</button></div>
-  </div></div>
+<div id="createModal" class="modal hidden"><div class="modal-inner">
+  <button class="modal-close" onclick="hide('createModal')">✕</button>
+  <h3>📝 New File</h3>
+  <input type="text" id="cfName" placeholder="my-file.txt" />
+  <textarea id="cfContent" placeholder="Content..."></textarea>
+  <select id="cfFolder"><option value="">Root</option></select>
+  <div class="modal-actions"><button class="btn-cancel" onclick="hide('createModal')">Cancel</button><button class="btn-save" onclick="createFile()">💾 Save</button></div>
+</div></div>
 
-  <div id="createFolderModal" class="modal hidden"><div class="modal-inner">
-    <button class="modal-close" onclick="closeModal('createFolderModal')">✕</button>
-    <h3>📁 Create Folder</h3>
-    <input type="text" id="newFolderName" placeholder="Folder name" />
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('createFolderModal')">Cancel</button><button class="btn-save" onclick="createFolder()">Create</button></div>
-  </div></div>
+<div id="folderModal" class="modal hidden"><div class="modal-inner">
+  <button class="modal-close" onclick="hide('folderModal')">✕</button>
+  <h3>📁 New Folder</h3>
+  <input type="text" id="fName" placeholder="Folder name" />
+  <div class="modal-actions"><button class="btn-cancel" onclick="hide('folderModal')">Cancel</button><button class="btn-save" onclick="createFolder()">Create</button></div>
+</div></div>
 
-  <div id="editFileModal" class="modal hidden"><div class="modal-inner">
-    <button class="modal-close" onclick="closeModal('editFileModal')">✕</button>
-    <h3 id="editFileTitle">✏️ Edit</h3>
-    <textarea id="editFileContent"></textarea>
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('editFileModal')">Cancel</button><button class="btn-save" onclick="saveEdit()">💾 Save</button></div>
-  </div></div>
+<div id="previewModal" class="modal hidden" onclick="if(event.target===this)hide('previewModal')"><div class="modal-inner">
+  <button class="modal-close" onclick="hide('previewModal')">✕</button>
+  <div id="previewContent"></div>
+</div></div>
 
-  <div id="previewModal" class="modal hidden" onclick="if(event.target===this)closeModal('previewModal')"><div class="modal-inner">
-    <button class="modal-close" onclick="closeModal('previewModal')">✕</button>
-    <div id="previewContent"></div>
-  </div></div>
+<script>
+const PASS = 'stor-demo';
+const BIN_ID = '6a32a2f8f5f4af5e2901f250';
+const API_KEY = '$2a$10$042UYdLV6wGHYFBvMQ81fO0xGxpYgvs2dLNazcNINlU7uYQ8goXtm';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS = { 'X-Master-Key': API_KEY, 'Content-Type': 'application/json' };
+const UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgdlrlyct/auto/upload';
+const UPLOAD_PRESET = 'stor_upload';
 
-  <script>
-    const PASSWORD = 'stor-demo';
-    const CLOUD_NAME = 'dgdlrlyct';
-    const UPLOAD_PRESET = 'stor_upload';
-    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
-    const STORAGE_KEY = 'cloudinary_files_index';
-    let currentFolder = '';
-    let editTarget = null;
+let files = [];
+let folder = '';
 
-    function $(id) { return document.getElementById(id); }
-    function show(id) { $(id).classList.remove('hidden'); }
-    function hide(id) { $(id).classList.add('hidden'); }
-    function closeModal(id) { hide(id); }
+function $(id) { return document.getElementById(id); }
+function show(id) { $(id).classList.remove('hidden'); }
+function hide(id) { $(id).classList.add('hidden'); }
+function icon(f) {
+  if (f.type==='folder') return '📁';
+  const i = { jpg:'🖼️', jpeg:'🖼️', png:'🖼️', gif:'🖼️', webp:'🖼️', mp4:'🎬', mp3:'🎵', pdf:'📕', txt:'📄', zip:'📦' };
+  return i[(f.format||'').toLowerCase()] || '📄';
+}
+function isImg(f) { return ['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()); }
+function fs(b) { if(!b)return''; if(b<1024)return b+' B'; if(b<1048576)return(b/1024).toFixed(1)+' KB'; return(b/1048576).toFixed(1)+' MB'; }
 
-    function doUnlock() {
-      if ($('passwordInput').value === PASSWORD) { hide('lockScreen'); show('homePage'); refreshAll(); }
-      else { $('lockError').textContent = 'Wrong password'; $('passwordInput').value = ''; }
-    }
-    function doLock() { hide('homePage'); hide('dashboardPage'); show('lockScreen'); $('passwordInput').value = ''; }
-    $('passwordInput').addEventListener('keyup', e => { if (e.key==='Enter') doUnlock(); });
+async function loadFiles() {
+  try {
+    const r = await fetch(`${BIN_URL}/latest`, { headers: HEADERS });
+    const d = await r.json();
+    files = d.record?.files || [];
+  } catch(e) { files = []; }
+}
+async function saveFiles() {
+  await fetch(BIN_URL, { method: 'PUT', headers: HEADERS, body: JSON.stringify({ files }) });
+}
 
-    function getFiles() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { return []; } }
-    function saveFiles(f) { localStorage.setItem(STORAGE_KEY, JSON.stringify(f)); }
-    function fmtSize(b) { if (!b) return ''; if (b<1024) return b+' B'; if (b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
-    function icon(f) {
-      const fmt = (f.format||'').toLowerCase();
-      if (f.type==='folder') return '📁';
-      const i = { jpg:'🖼️', jpeg:'🖼️', png:'🖼️', gif:'🖼️', webp:'🖼️', mp4:'🎬', mp3:'🎵', pdf:'📕', txt:'📄', zip:'📦' };
-      return i[fmt] || '📄';
-    }
-    function isImage(f) { return ['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()); }
-    function isVideo(f) { return ['mp4','mov','webm'].includes((f.format||'').toLowerCase()); }
-    function isAudio(f) { return ['mp3','wav','ogg'].includes((f.format||'').toLowerCase()); }
+function unlock() {
+  if ($('pw').value === PASS) { hide('lockScreen'); show('home'); loadAll(); }
+  else { $('err').textContent = 'Wrong password'; }
+}
+function lock() { hide('home'); hide('dash'); show('lockScreen'); $('pw').value = ''; }
+$('pw').addEventListener('keyup', e => { if (e.key==='Enter') unlock(); });
 
-    function getFolders() {
-      const s = new Set();
-      getFiles().forEach(f => { if (f.folder) s.add(f.folder); });
-      return [...s].sort();
-    }
+async function loadAll() { await loadFiles(); renderGallery(); renderList(); updateFolders(); }
+function getFolders() { const s = new Set(); files.forEach(f => { if (f.folder) s.add(f.folder); }); return [...s]; }
 
-    function refreshAll() { loadGallery(); loadList(); updateSelects(); }
-    function updateSelects() {
-      const opts = '<option value="">Root</option>'+getFolders().map(f=>'<option value="'+f+'">📁 '+f+'</option>').join('');
-      const s = $('newFileFolder'); if (s) s.innerHTML = opts;
-    }
+function renderGallery() {
+  const imgs = files.filter(f => isImg(f));
+  const el = $('gallery');
+  el.innerHTML = imgs.length ? imgs.slice(0,12).map(f => `<div class="gallery-card" onclick="openDash()"><img src="${f.url}" loading="lazy" /><div class="info"><span>${f.name}</span><span>${fs(f.bytes)}</span></div></div>`).join('') : '<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;">No images yet</p>';
+}
 
-    function loadGallery() {
-      const files = getFiles().filter(f => isImage(f));
-      const el = $('homeGallery');
-      if (!files.length) { el.innerHTML = '<p style="color:#4ade80;opacity:0.5;font-size:0.8rem;">No images yet</p>'; return; }
-      el.innerHTML = files.slice(0,12).map(f => `<div class="gallery-card" onclick="openDashboard()"><img src="${f.url}" loading="lazy" /><div class="info"><span>${f.name}</span><span>${fmtSize(f.bytes)}</span></div></div>`).join('');
-    }
+function renderList() {
+  let fList = folder ? files.filter(f => f.folder === folder) : files;
+  const el = $('list');
+  el.innerHTML = fList.length ? fList.map((f,i) => {
+    const idx = files.indexOf(f);
+    return `<div class="file-row" onclick="preview(${idx})">
+      <div class="file-thumb">${isImg(f)?`<img src="${f.url}" loading="lazy" />`:icon(f)}</div>
+      <div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${fs(f.bytes)}${f.folder?' · 📁'+f.folder:''}</div></div>
+      <div class="file-btns" onclick="event.stopPropagation()">
+        ${f.url?`<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button>`:''}
+        <button class="del" onclick="delFile(${idx})">🗑</button>
+      </div></div>`;
+  }).join('') : '<div class="empty-state"><span>📂</span>No files</div>';
+}
 
-    function loadList() {
-      let files = getFiles();
-      if (currentFolder) files = files.filter(f => f.folder === currentFolder);
-      const el = $('fileList');
-      if (!files.length) { el.innerHTML = '<div class="empty-state"><span>📂</span>No files. Upload something!</div>'; return; }
-      el.innerHTML = files.map(f => {
-        const idx = getFiles().indexOf(f);
-        return `<div class="file-row" onclick="preview(${idx})">
-          <div class="file-thumb">${isImage(f) ? `<img src="${f.url}" loading="lazy" />` : icon(f)}</div>
-          <div class="file-info"><div class="file-name">${f.name}</div><div class="file-meta">${fmtSize(f.bytes)} · ${f.format||'folder'}</div></div>
-          <div class="file-btns" onclick="event.stopPropagation()">
-            ${f.url ? `<button onclick="copyUrl('${f.url}')">📋</button><button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button>` : ''}
-            <button class="del" onclick="delFile(${idx})">🗑</button>
-          </div></div>`;
-      }).join('');
-    }
+function updateFolders() {
+  const s = $('cfFolder'); if(!s) return;
+  s.innerHTML = '<option value="">Root</option>'+getFolders().map(f=>'<option>'+f+'</option>').join('');
+}
 
-    // UPLOAD TO CLOUDINARY
-    $('fileInput').addEventListener('change', async function() {
-      const files = this.files; if (!files.length) return;
-      const status = $('status'); const current = getFiles(); let done = 0;
-      for (let file of files) {
-        status.textContent = 'Uploading '+file.name+'...'; status.className = 'status';
-        const fd = new FormData(); fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET);
-        if (currentFolder) fd.append('folder', currentFolder);
-        try {
-          const r = await fetch(UPLOAD_URL,{method:'POST',body:fd}); const d = await r.json();
-          if (d.secure_url) {
-            current.unshift({
-              name: file.name,
-              url: d.secure_url,
-              public_id: d.public_id,
-              format: (d.format||file.name.split('.').pop()).toLowerCase(),
-              bytes: d.bytes||file.size,
-              folder: currentFolder||'',
-              date: new Date().toISOString(),
-              onCloudinary: true
-            });
-            done++;
-          }
-        } catch(e) { console.error(e); }
-      }
-      saveFiles(current); refreshAll();
-      status.textContent = done ? `✅ ${done} uploaded to Cloudinary` : '❌ Failed';
-      status.className = done ? 'status ok' : 'status err';
-      this.value = '';
-      setTimeout(()=>{status.textContent='';status.className='status';},3000);
-    });
+function preview(i) {
+  const f = files[i]; if(!f) return;
+  const c = $('previewContent');
+  if (f.type==='folder') c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">📁</p><p>${f.folder}</p><button class="btn-save" style="padding:0.6rem 1.5rem;margin-top:1rem;" onclick="folder='${f.folder}';hide('previewModal');openDash();">📂 Open</button></div>`;
+  else if (isImg(f)) c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
+  else if (['mp4','mov','webm'].includes(f.format)) c.innerHTML = `<video src="${f.url}" controls class="preview-video" playsinline></video>`;
+  else if (['mp3','wav','ogg'].includes(f.format)) c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;"></audio></div>`;
+  else if (f.format==='pdf') c.innerHTML = `<iframe src="${f.url}"></iframe>`;
+  else c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open</a></div>`;
+  show('previewModal');
+}
 
-    // CREATE FILE ON CLOUDINARY
-    function openCreateFile() { $('newFileName').value=''; $('newFileContent').value=''; updateSelects(); show('createFileModal'); }
-    async function createFile() {
-      const name = $('newFileName').value.trim();
-      const content = $('newFileContent').value;
-      const folder = $('newFileFolder').value;
-      if (!name) return alert('Enter file name');
-      
-      const status = $('status');
-      status.textContent = 'Uploading to Cloudinary...';
-      
-      const blob = new Blob([content], { type: 'text/plain' });
-      const fd = new FormData();
-      fd.append('file', blob, name);
-      fd.append('upload_preset', UPLOAD_PRESET);
-      if (folder) fd.append('folder', folder);
-      
-      try {
-        const r = await fetch(UPLOAD_URL, { method: 'POST', body: fd });
-        const d = await r.json();
-        if (d.secure_url) {
-          const files = getFiles();
-          files.unshift({ name, url: d.secure_url, public_id: d.public_id, format: (d.format||name.split('.').pop()).toLowerCase(), bytes: d.bytes||blob.size, folder, date: new Date().toISOString(), onCloudinary: true });
-          saveFiles(files);
-          closeModal('createFileModal');
-          refreshAll();
-          status.textContent = '✅ File created on Cloudinary!';
-          status.className = 'status ok';
-        }
-      } catch(e) {
-        status.textContent = '❌ Failed';
-        status.className = 'status err';
-      }
-      setTimeout(()=>{status.textContent='';status.className='status';},3000);
-    }
+async function delFile(i) { if(!confirm('Delete?'))return; files.splice(i,1); await saveFiles(); renderGallery(); renderList(); setStatus('Deleted'); }
 
-    // CREATE FOLDER
-    function openCreateFolder() { $('newFolderName').value=''; show('createFolderModal'); }
-    async function createFolder() {
-      const name = $('newFolderName').value.trim();
-      if (!name) return alert('Enter folder name');
-      
-      const fd = new FormData();
-      fd.append('file', new Blob([''], { type: 'text/plain' }), '.placeholder');
-      fd.append('upload_preset', UPLOAD_PRESET);
-      fd.append('folder', name);
-      fd.append('public_id', name + '/.placeholder');
-      
-      try {
-        await fetch(UPLOAD_URL, { method: 'POST', body: fd });
-      } catch(e) {}
-      
-      const files = getFiles();
-      files.unshift({ name: name+'/', url: '', public_id: name+'/.placeholder', format: 'folder', bytes: 0, type: 'folder', folder: name, date: new Date().toISOString() });
-      saveFiles(files);
-      closeModal('createFolderModal');
-      currentFolder = name;
-      refreshAll();
-      setStatus('📁 Folder created!');
-    }
+function copyUrl(u) { navigator.clipboard.writeText(u).then(()=>setStatus('✅ Copied!')).catch(()=>prompt('Copy:',u)); }
+function downloadFile(u,n) { const a=document.createElement('a'); a.href=u; a.download=n; a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+function setStatus(m) { const s=$('status'); s.textContent=m; s.className='status ok'; setTimeout(()=>{s.textContent='';s.className='status';},2000); }
 
-    // PREVIEW
-    function preview(i) {
-      const f = getFiles()[i]; if (!f) return;
-      const c = $('previewContent');
-      if (f.type==='folder') {
-        c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">📁</p><p>${f.folder}</p><button class="btn-save" style="padding:0.6rem 1.5rem;margin-top:1rem;" onclick="currentFolder='${f.folder}';closeModal('previewModal');openDashboard();">📂 Open</button></div>`;
-      } else if (isImage(f)) c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
-      else if (isVideo(f)) c.innerHTML = `<video src="${f.url}" controls class="preview-video" playsinline></video>`;
-      else if (isAudio(f)) c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;margin-top:1rem;"></audio></div>`;
-      else if (f.format==='pdf') c.innerHTML = `<iframe src="${f.url}"></iframe><p style="text-align:center;"><a href="${f.url}" target="_blank">Open PDF</a></p>`;
-      else c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(f)}</p><p>${f.name}</p><a href="${f.url}" target="_blank">Open File</a></div>`;
-      show('previewModal');
-    }
+function openCreate() { $('cfName').value=''; $('cfContent').value=''; updateFolders(); show('createModal'); }
+async function createFile() {
+  const name=$('cfName').value.trim(), content=$('cfContent').value, fold=$('cfFolder').value;
+  if(!name) return alert('Enter name');
+  const fd = new FormData(); fd.append('file', new Blob([content],{type:'text/plain'}), name); fd.append('upload_preset',UPLOAD_PRESET);
+  if(fold) fd.append('folder', fold);
+  const r = await fetch(UPLOAD_URL,{method:'POST',body:fd}); const d = await r.json();
+  if(d.secure_url) { files.unshift({name,url:d.secure_url,public_id:d.public_id,format:(d.format||name.split('.').pop()).toLowerCase(),bytes:d.bytes||0,folder:fold||'',date:new Date().toISOString()}); await saveFiles(); hide('createModal'); loadAll(); setStatus('✅ Created!'); }
+}
 
-    function delFile(i) { if (!confirm('Delete?')) return; const f=getFiles(); f.splice(i,1); saveFiles(f); refreshAll(); setStatus('Deleted'); }
-    function copyUrl(u) { navigator.clipboard.writeText(u).then(()=>setStatus('✅ Copied!')).catch(()=>prompt('Copy:',u)); }
-    function downloadFile(u,n) { const a=document.createElement('a'); a.href=u; a.download=n; a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
-    function setStatus(m) { const s=$('status'); s.textContent=m; s.className='status ok'; setTimeout(()=>{s.textContent='';s.className='status';},2500); }
+function openFolder() { $('fName').value=''; show('folderModal'); }
+async function createFolder() {
+  const name=$('fName').value.trim(); if(!name) return alert('Enter name');
+  files.unshift({name:name+'/',url:'',public_id:'folder_'+Date.now(),format:'folder',bytes:0,type:'folder',folder:name,date:new Date().toISOString()});
+  await saveFiles(); hide('folderModal'); folder=name; loadAll(); setStatus('📁 Created!');
+}
 
-    function openDashboard() { hide('homePage'); show('dashboardPage'); refreshAll(); }
-    function goHome() { hide('dashboardPage'); show('homePage'); loadGallery(); }
-    document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden')); });
+$('fileInput').addEventListener('change', async function() {
+  const fls = this.files; if(!fls.length) return;
+  const s = $('status'); let done=0;
+  for(let file of fls) {
+    s.textContent='Uploading...'; s.className='status';
+    const fd = new FormData(); fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET);
+    if(folder) fd.append('folder',folder);
+    try {
+      const r = await fetch(UPLOAD_URL,{method:'POST',body:fd}); const d = await r.json();
+      if(d.secure_url) { files.unshift({name:file.name,url:d.secure_url,public_id:d.public_id,format:(d.format||file.name.split('.').pop()).toLowerCase(),bytes:d.bytes||file.size,folder:folder||'',date:new Date().toISOString()}); done++; }
+    } catch(e) {}
+  }
+  await saveFiles(); loadAll();
+  s.textContent = done ? `✅ ${done} uploaded` : '❌ Failed';
+  s.className = done ? 'status ok' : 'status err';
+  this.value = '';
+  setTimeout(()=>{s.textContent='';s.className='status';},3000);
+});
 
-    refreshAll();
-  </script>
+function openDash() { hide('home'); show('dash'); loadAll(); }
+function goHome() { hide('dash'); show('home'); renderGallery(); }
+
+loadAll();
+</script>
 </body>
 </html>
