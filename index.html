@@ -14,7 +14,7 @@
     }
     html { height: -webkit-fill-available; }
     input, textarea { -webkit-appearance: none; outline: none; font-family: inherit; }
-    button { cursor: pointer; }
+    button { cursor: pointer; border: none; }
 
     .lock-screen {
       min-height: 100vh; min-height: -webkit-fill-available;
@@ -32,7 +32,7 @@
     }
     .lock-box .unlock-btn {
       width: 100%; padding: 0.9rem; margin-top: 0.8rem; border-radius: 2rem;
-      background: #22c55e; color: #052e16; border: none; font-weight: 700; font-size: 1rem;
+      background: #22c55e; color: #052e16; font-weight: 700; font-size: 1rem;
     }
     .lock-box .error { color: #fca5a5; font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2rem; }
 
@@ -49,9 +49,9 @@
     .hero-content { position: relative; text-align: center; padding: 1rem; }
     .hero-content h1 { font-size: 1.8rem; font-weight: 700; color: #86efac; margin-bottom: 0.5rem; }
     .hero-content p { font-size: 0.85rem; color: #4ade80; margin-bottom: 1rem; }
-    .hero-content .cta {
+    .cta {
       display: inline-block; padding: 0.7rem 1.8rem; border-radius: 2rem;
-      background: #22c55e; color: #052e16; font-weight: 600; font-size: 0.95rem; border: none;
+      background: #22c55e; color: #052e16; font-weight: 600; font-size: 0.95rem;
     }
     .gallery-section { padding: 1.2rem 0.8rem; }
     .gallery-section h2 { font-size: 1.1rem; margin-bottom: 0.8rem; }
@@ -71,11 +71,11 @@
     .fab {
       position: fixed; bottom: 1rem; right: 1rem; z-index: 50;
       width: 50px; height: 50px; border-radius: 50%; background: #22c55e;
-      border: none; color: #052e16; font-size: 1.4rem; box-shadow: 0 4px 20px rgba(34,197,94,0.5);
+      color: #052e16; font-size: 1.4rem; box-shadow: 0 4px 20px rgba(34,197,94,0.5);
       display: flex; align-items: center; justify-content: center;
     }
 
-    .dashboard { min-height: 100vh; padding-bottom: 5rem; }
+    .dashboard { min-height: 100vh; padding-bottom: 5.5rem; }
     .dash-header {
       display: flex; justify-content: space-between; align-items: center;
       padding: 0.7rem 0.9rem; border-bottom: 1px solid rgba(74,222,128,0.1);
@@ -96,14 +96,14 @@
     }
     .quick-actions button:active { background: rgba(34,197,94,0.15); }
     input[type="file"] { display: none; }
-    .status { text-align: center; font-size: 0.75rem; padding: 0.2rem; min-height: 1rem; }
+    .status { text-align: center; font-size: 0.75rem; padding: 0.2rem; min-height: 1.2rem; }
     .status.ok { color: #4ade80; }
     .status.err { color: #fca5a5; }
 
     .folder-section { margin-bottom: 0.5rem; }
     .folder-chips { display: flex; gap: 0.3rem; flex-wrap: wrap; }
     .folder-chip {
-      padding: 0.3rem 0.7rem; border-radius: 1rem; font-size: 0.7rem;
+      padding: 0.35rem 0.7rem; border-radius: 1rem; font-size: 0.7rem;
       border: 1px solid rgba(74,222,128,0.2); background: rgba(34,197,94,0.03);
       color: #86efac; cursor: pointer; font-weight: 500;
     }
@@ -113,12 +113,12 @@
     .file-row {
       display: flex; align-items: center; gap: 0.5rem;
       background: rgba(34,197,94,0.02); border: 1px solid rgba(74,222,128,0.06);
-      border-radius: 0.6rem; padding: 0.45rem 0.5rem;
+      border-radius: 0.6rem; padding: 0.5rem;
     }
     .file-thumb {
       width: 38px; height: 38px; border-radius: 0.35rem; flex-shrink: 0;
       background: #0a1a0a; display: flex; align-items: center;
-      justify-content: center; font-size: 1.1rem; overflow: hidden;
+      justify-content: center; font-size: 1.2rem; overflow: hidden;
     }
     .file-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .file-info { flex: 1; min-width: 0; }
@@ -126,10 +126,9 @@
     .file-meta { font-size: 0.62rem; color: #4ade80; }
     .file-btns { display: flex; gap: 0.15rem; flex-shrink: 0; }
     .file-btns button {
-      width: 26px; height: 26px; border-radius: 0.35rem;
-      border: 1px solid rgba(74,222,128,0.15);
-      background: rgba(34,197,94,0.03); color: #86efac;
-      font-size: 0.65rem; display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 0.35rem; font-size: 0.7rem;
+      border: 1px solid rgba(74,222,128,0.15); background: rgba(34,197,94,0.03);
+      color: #86efac; display: flex; align-items: center; justify-content: center;
     }
     .file-btns .del { color: #fca5a5; }
     .empty-state { text-align: center; padding: 2.5rem 1rem; color: #4ade80; opacity: 0.5; }
@@ -142,9 +141,9 @@
       display: flex; gap: 0.3rem;
     }
     .bottom-bar button {
-      flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.7rem;
+      flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.68rem;
     }
-    .btn-green { background: #22c55e; color: #052e16; border: none; }
+    .btn-green { background: #22c55e; color: #052e16; }
     .btn-ghost { background: transparent; border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
 
     .modal {
@@ -152,29 +151,30 @@
       display: flex; align-items: center; justify-content: center; z-index: 100; padding: 0.5rem;
     }
     .modal-inner {
-      background: #0d1f0d; border-radius: 0.7rem; padding: 0.7rem;
+      background: #0d1f0d; border-radius: 0.7rem; padding: 0.8rem;
       width: 100%; max-width: 95vw; border: 1px solid rgba(74,222,128,0.15);
       max-height: 85vh; overflow-y: auto;
     }
     .modal-close {
       float: right; background: none; border: none; color: #86efac;
-      font-size: 1.2rem; cursor: pointer; padding: 0.15rem;
+      font-size: 1.3rem; cursor: pointer; padding: 0.15rem;
     }
     .preview-img, .preview-video { width: 100%; border-radius: 0.4rem; max-height: 70vh; object-fit: contain; }
-    .modal-inner h3 { margin-bottom: 0.6rem; font-size: 0.9rem; }
+    .modal-inner h3 { margin-bottom: 0.6rem; font-size: 0.95rem; }
     .modal-inner input, .modal-inner textarea {
       width: 100%; padding: 0.6rem; border-radius: 0.5rem; margin-bottom: 0.4rem;
       border: 1px solid rgba(74,222,128,0.2); background: rgba(34,197,94,0.05);
-      color: #86efac; font-size: 0.8rem;
+      color: #86efac; font-size: 0.85rem;
     }
     .modal-inner textarea { min-height: 120px; resize: vertical; }
     .modal-actions { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
-    .modal-actions button { flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.78rem; }
-    .btn-save { background: #22c55e; color: #052e16; border: none; }
+    .modal-actions button { flex: 1; padding: 0.55rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.8rem; }
+    .btn-save { background: #22c55e; color: #052e16; }
     .btn-cancel { background: transparent; border: 1px solid rgba(74,222,128,0.2); color: #86efac; }
 
-    button:active, .upload-zone:active, .gallery-card:active, .folder-chip:active { opacity: 0.7; }
+    button:active, .folder-chip:active { opacity: 0.7; }
     .hidden { display: none !important; }
+    iframe { width: 100%; height: 70vh; border: none; border-radius: 0.4rem; }
   </style>
 </head>
 <body>
@@ -225,27 +225,44 @@
     </div>
   </div>
 
-  <!-- MODALS -->
+  <!-- CREATE FILE MODAL -->
   <div id="createFileModal" class="modal hidden"><div class="modal-inner">
     <button class="modal-close" onclick="closeModal('createFileModal')">✕</button>
-    <h3>📝 New File</h3><input type="text" id="newFileName" placeholder="filename.txt" /><textarea id="newFileContent" placeholder="Content..."></textarea>
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('createFileModal')">Cancel</button><button class="btn-save" onclick="createFile()">💾 Save</button></div>
+    <h3>📝 New File</h3>
+    <input type="text" id="newFileName" placeholder="my-file.txt" />
+    <textarea id="newFileContent" placeholder="Write here..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('createFileModal')">Cancel</button>
+      <button class="btn-save" onclick="createFile()">💾 Save</button>
+    </div>
   </div></div>
 
+  <!-- CREATE FOLDER MODAL -->
   <div id="createFolderModal" class="modal hidden"><div class="modal-inner">
     <button class="modal-close" onclick="closeModal('createFolderModal')">✕</button>
-    <h3>📁 New Folder</h3><input type="text" id="newFolderName" placeholder="Folder name" />
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('createFolderModal')">Cancel</button><button class="btn-save" onclick="createFolder()">Create</button></div>
+    <h3>📁 New Folder</h3>
+    <input type="text" id="newFolderName" placeholder="Folder name" />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('createFolderModal')">Cancel</button>
+      <button class="btn-save" onclick="createFolder()">Create</button>
+    </div>
   </div></div>
 
+  <!-- EDIT FILE MODAL -->
   <div id="editFileModal" class="modal hidden"><div class="modal-inner">
     <button class="modal-close" onclick="closeModal('editFileModal')">✕</button>
-    <h3 id="editFileTitle">✏️ Edit</h3><textarea id="editFileContent"></textarea>
-    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('editFileModal')">Cancel</button><button class="btn-save" onclick="saveEdit()">💾 Save</button></div>
+    <h3 id="editFileTitle">✏️ Edit</h3>
+    <textarea id="editFileContent"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('editFileModal')">Cancel</button>
+      <button class="btn-save" onclick="saveEdit()">💾 Save</button>
+    </div>
   </div></div>
 
+  <!-- PREVIEW MODAL -->
   <div id="previewModal" class="modal hidden" onclick="if(event.target===this)closeModal('previewModal')"><div class="modal-inner">
-    <button class="modal-close" onclick="closeModal('previewModal')">✕</button><div id="previewContent"></div>
+    <button class="modal-close" onclick="closeModal('previewModal')">✕</button>
+    <div id="previewContent"></div>
   </div></div>
 
   <script>
@@ -261,6 +278,7 @@
     function hide(id) { $(id).classList.add('hidden'); }
     function closeModal(id) { hide(id); }
 
+    // AUTH
     function doUnlock() {
       if ($('passwordInput').value === PASSWORD) { hide('lockScreen'); show('homePage'); $('lockError').textContent = ''; loadGallery(); }
       else { $('lockError').textContent = 'Wrong password'; $('passwordInput').value = ''; }
@@ -268,6 +286,7 @@
     function doLock() { hide('homePage'); hide('dashboardPage'); show('lockScreen'); $('passwordInput').value = ''; $('lockError').textContent = ''; }
     $('passwordInput').addEventListener('keyup', e => { if (e.key === 'Enter') doUnlock(); });
 
+    // STORAGE
     function getFiles() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { return []; } }
     function saveFiles(f) { localStorage.setItem(STORAGE_KEY, JSON.stringify(f)); }
     function fmtSize(b) { if (!b) return '0 B'; if (b < 1024) return b + ' B'; if (b < 1048576) return (b/1024).toFixed(1) + ' KB'; return (b/1048576).toFixed(1) + ' MB'; }
@@ -287,7 +306,7 @@
     function loadGallery() {
       const files = getFiles().filter(f => ['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase()));
       const el = $('homeGallery');
-      if (!files.length) { el.innerHTML = '<p style="color:#4ade80;opacity:0.5;padding:1rem;font-size:0.8rem;">No images yet. Upload some!</p>'; return; }
+      if (!files.length) { el.innerHTML = '<p style="color:#4ade80;opacity:0.5;padding:1rem;font-size:0.8rem;">No images yet</p>'; return; }
       el.innerHTML = files.slice(0,10).map(f => `<div class="gallery-card" onclick="openDashboard()"><img src="${f.url}" loading="lazy" /><div class="info"><span>${f.name}</span><span>${fmtSize(f.bytes)}</span></div></div>`).join('');
     }
 
@@ -305,42 +324,79 @@
       let files = getFiles();
       if (currentFolder) files = files.filter(f => f.folder === currentFolder);
       const el = $('fileList');
-      if (!files.length) { el.innerHTML = '<div class="empty-state"><span>📂</span>No files here</div>'; return; }
+      if (!files.length) { el.innerHTML = '<div class="empty-state"><span>📂</span>No files</div>'; return; }
       el.innerHTML = files.map((f,i) => {
-        const realIndex = getFiles().indexOf(f);
+        const realIdx = getFiles().indexOf(f);
         const isImg = ['jpg','jpeg','png','gif','webp'].includes((f.format||'').toLowerCase());
         return `<div class="file-row">
-          <div class="file-thumb" onclick="preview(${realIndex})">${isImg ? `<img src="${f.url}" loading="lazy" />` : icon(f.format)}</div>
-          <div class="file-info" onclick="preview(${realIndex})"><div class="file-name">${f.name}</div><div class="file-meta">${fmtSize(f.bytes)} · ${f.format||'file'}${f.folder?' · 📁'+f.folder:''}</div></div>
+          <div class="file-thumb" onclick="preview(${realIdx})">${isImg ? `<img src="${f.url}" loading="lazy" />` : icon(f.format)}</div>
+          <div class="file-info" onclick="preview(${realIdx})"><div class="file-name">${f.name}</div><div class="file-meta">${fmtSize(f.bytes)} · ${f.format||'file'}</div></div>
           <div class="file-btns">
             <button onclick="copyUrl('${f.url}')">📋</button>
             <button onclick="downloadFile('${f.url}','${f.name}')">⬇️</button>
-            <button onclick="openEdit(${realIndex})">✏️</button>
-            <button class="del" onclick="delFile(${realIndex})">🗑</button>
+            <button onclick="openEdit(${realIdx})">✏️</button>
+            <button class="del" onclick="delFile(${realIdx})">🗑</button>
           </div></div>`;
       }).join('');
     }
 
+    // CREATE FILE - FIXED: no extension required
     function openCreateFile() { $('newFileName').value = ''; $('newFileContent').value = ''; show('createFileModal'); $('newFileName').focus(); }
     function createFile() {
-      const name = $('newFileName').value.trim(), content = $('newFileContent').value;
-      if (!name) return alert('Enter filename');
-      if (!name.includes('.')) return alert('Add extension like .txt');
+      const name = $('newFileName').value.trim();
+      const content = $('newFileContent').value;
+      if (!name) { alert('Please enter a file name'); return; }
+      
+      const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : 'txt';
       const blob = new Blob([content], { type: 'text/plain' });
       const files = getFiles();
-      files.unshift({ name, url: URL.createObjectURL(blob), public_id: 'local_'+Date.now(), format: name.split('.').pop().toLowerCase(), bytes: blob.size, type: 'raw', content, folder: currentFolder, date: new Date().toISOString(), isLocal: true });
-      saveFiles(files); closeModal('createFileModal'); refreshAll(); setStatus('✅ File created!');
+      
+      files.unshift({
+        name: name,
+        url: URL.createObjectURL(blob),
+        public_id: 'local_' + Date.now(),
+        format: ext,
+        bytes: blob.size,
+        type: 'raw',
+        content: content,
+        folder: currentFolder,
+        date: new Date().toISOString(),
+        isLocal: true,
+      });
+      
+      saveFiles(files);
+      closeModal('createFileModal');
+      refreshAll();
+      setStatus('✅ File created!');
     }
 
+    // CREATE FOLDER - FIXED: works immediately
     function openCreateFolder() { $('newFolderName').value = ''; show('createFolderModal'); $('newFolderName').focus(); }
     function createFolder() {
       const name = $('newFolderName').value.trim();
-      if (!name) return alert('Enter folder name');
+      if (!name) { alert('Please enter a folder name'); return; }
+      
       const files = getFiles();
-      files.unshift({ name: name+'/', url: '', public_id: 'folder_'+Date.now(), format: 'folder', bytes: 0, type: 'folder', folder: name, date: new Date().toISOString(), isLocal: true });
-      saveFiles(files); closeModal('createFolderModal'); refreshAll(); setStatus('📁 Folder created!');
+      files.unshift({
+        name: name + '/',
+        url: '',
+        public_id: 'folder_' + Date.now(),
+        format: 'folder',
+        bytes: 0,
+        type: 'folder',
+        folder: name,
+        date: new Date().toISOString(),
+        isLocal: true,
+      });
+      
+      saveFiles(files);
+      closeModal('createFolderModal');
+      currentFolder = name;
+      refreshAll();
+      setStatus('📁 Folder created!');
     }
 
+    // EDIT
     function openEdit(i) {
       const f = getFiles()[i]; if (!f || f.format==='folder') return;
       editIndex = i; $('editFileTitle').textContent = '✏️ '+f.name;
@@ -354,16 +410,26 @@
       saveFiles(files); closeModal('editFileModal'); editIndex = -1; refreshAll(); setStatus('💾 Saved!');
     }
 
+    // PREVIEW
     function preview(i) {
       const f = getFiles()[i]; if (!f) return;
       const c = $('previewContent'), fmt = (f.format||'').toLowerCase();
-      if (fmt === 'folder') c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">📁</p><p>${f.folder}</p></div>`;
-      else if (f.content !== undefined && ['txt','md','json','html','css','js'].includes(fmt)) c.innerHTML = `<h3>📄 ${f.name}</h3><pre style="white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,0.3);padding:0.6rem;border-radius:0.4rem;max-height:60vh;overflow-y:auto;font-size:0.75rem;">${escapeHtml(f.content)}</pre>`;
-      else if (['jpg','jpeg','png','gif','webp'].includes(fmt)) c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
-      else if (['mp4','mov','webm'].includes(fmt)) c.innerHTML = `<video src="${f.url}" controls class="preview-video"></video>`;
-      else if (['mp3','wav','ogg'].includes(fmt)) c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;"></audio></div>`;
-      else if (fmt === 'pdf') c.innerHTML = `<iframe src="${f.url}" style="width:100%;height:70vh;border:none;border-radius:0.4rem;"></iframe>`;
-      else c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(fmt)}</p><p>${f.name}</p><a href="${f.url}" target="_blank" style="color:#4ade80;">Open File</a></div>`;
+      
+      if (fmt === 'folder') {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">📁</p><p style="font-size:1.2rem;">${f.folder}</p><button class="btn-save" style="margin-top:1rem;padding:0.6rem 1.5rem;" onclick="setFolder('${f.folder}');closeModal('previewModal');openDashboard();">Open Folder</button></div>`;
+      } else if (f.content !== undefined) {
+        c.innerHTML = `<h3>📄 ${f.name}</h3><pre style="white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,0.3);padding:0.6rem;border-radius:0.4rem;max-height:60vh;overflow-y:auto;font-size:0.75rem;">${escapeHtml(f.content)}</pre>`;
+      } else if (['jpg','jpeg','png','gif','webp'].includes(fmt)) {
+        c.innerHTML = `<img src="${f.url}" class="preview-img" />`;
+      } else if (['mp4','mov','webm'].includes(fmt)) {
+        c.innerHTML = `<video src="${f.url}" controls class="preview-video"></video>`;
+      } else if (['mp3','wav','ogg'].includes(fmt)) {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><h3>🎵 ${f.name}</h3><audio src="${f.url}" controls style="width:100%;"></audio></div>`;
+      } else if (fmt === 'pdf') {
+        c.innerHTML = `<iframe src="${f.url}"></iframe><p style="text-align:center;margin-top:0.5rem;"><a href="${f.url}" target="_blank" style="color:#4ade80;">Open PDF</a></p>`;
+      } else {
+        c.innerHTML = `<div style="text-align:center;padding:2rem;"><p style="font-size:3rem;">${icon(fmt)}</p><p>${f.name}</p><a href="${f.url}" target="_blank" style="color:#4ade80;">Open</a></div>`;
+      }
       show('previewModal');
     }
     function escapeHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -373,11 +439,12 @@
     function downloadFile(u,n) { if (!u) return; const a=document.createElement('a'); a.href=u; a.download=n; a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
     function setStatus(msg) { const s = $('status'); s.textContent = msg; s.className = 'status ok'; setTimeout(()=>{s.textContent='';s.className='status';},2000); }
 
+    // UPLOAD
     $('fileInput').addEventListener('change', async function() {
       const files = this.files; if (!files.length) return;
       const status = $('status'); const current = getFiles(); let done = 0;
       for (let file of files) {
-        status.textContent = 'Uploading '+file.name+'...'; status.className = 'status';
+        status.textContent = 'Uploading...'; status.className = 'status';
         const fd = new FormData(); fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET);
         if (currentFolder) fd.append('folder', currentFolder);
         try {
